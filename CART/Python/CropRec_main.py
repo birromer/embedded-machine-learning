@@ -8,7 +8,7 @@ from CART import *
 
 
 # Extract dataset
-dataset='croprec.csv'
+dataset='../../DATASETS/croprec.csv'
 crop_df = pd.read_csv(dataset, header=0)
 Y = crop_df.label.values
 features = crop_df.columns.values[:-1]
