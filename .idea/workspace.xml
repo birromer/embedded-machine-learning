@@ -11,13 +11,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="26383937-935f-4956-8f2f-11bfcd08a878" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ANN/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CART/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/RF/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SVM/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="26383937-935f-4956-8f2f-11bfcd08a878" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +85,7 @@
       <workItem from="1636962457254" duration="1024000" />
       <workItem from="1636963901423" duration="95000" />
       <workItem from="1636964317616" duration="175000" />
-      <workItem from="1636964520206" duration="4959000" />
+      <workItem from="1636964520206" duration="5097000" />
     </task>
     <servers />
   </component>
