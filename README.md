@@ -77,6 +77,7 @@ Linux sera juste pratique dans le cadre de nos exercices et pourrait être suppr
 
 Il sera possible d'ajouter à ces éléments TensorFlow Lite et d'autres outils dédiés à l'IA et l'embarqué.
 
+[L'image du système de la RPI4 se trouve ici !](https://filesender.renater.fr/?s=download&token=bec2a806-8836-4abc-a8bb-ba0215291984).
 
 # Répertoires
 
