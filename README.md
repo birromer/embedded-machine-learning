@@ -1,6 +1,10 @@
+
+
 # Embedded Machine Learning
 
 Ce projet GitLab est la base du code que vous devez rendre sur Moodle. Il faut en respecter l'esprit et l'organisation.
+
+[[_TOC_]]
 
 # Embarquer la prédiction issue de l'apprentissage automatique ?
 
