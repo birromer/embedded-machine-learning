@@ -31,7 +31,7 @@ Au niveau des ressources nécessaires, on peut s'interroger :
 - Faut-il un processeur capable ?  
 - Quelle puissance de calcul est requise ?
 
-# Contexte
+# Contexte d'apprentissage
 
 Pour illustrer ces problématiques, un contexte principal a été choisi : **la reconnaissance de styles musicaux**.
 
@@ -40,35 +40,28 @@ Il s'agit de pouvoir prédire, d'après un extrait musical de 30 secondes, le st
 Nous disposons pour cela de plusieurs bases de données. La plus simple à utiliser, même si celle-ci n'est pas parfaite, est la collection GTZAN disponible sous différents formats (.au ou .wav). L'ensemble de données se compose de 1000 pistes audio de 30 secondes, de 10 styles différents, chacun représenté par 100 pistes. Les pistes sont toutes des fichiers audio monocanal, échantillonnés sur 16 bits à la fréquence de 22050 Hz.
 
 Les styles musicaux sont :
-
-    blues
-    classique
-    pays
-    disco
-    hip hop
-    jazz
-    métal
-    pop
-    reggae
-
-    rock
-
-
-Solutions étudiées
-
-Nous allons implémenter les algorithmes CART, RF, SVM, ANN.
-
+0. blues 
+1. classique 
+2. country 
+3. disco 
+4. hiphop 
+5. jazz 
+6. metal 
+7. pop 
+8. reggae 
+9. rock
 
 # Standards
 
 Ce projet utilise nécessairement :
 - un compilateur C++ à la norme 20,
-- cmake (>=3.18)
-- Python 3.9
+- cmake (>=3.18),
+- Python 3.9 et Scikit Learn.
 
 CMake est utilisé pour construire les exécutables du projet. L'utilisation d'un compilateur local, d'un cross-compilateur ou d'un compilateur distant (sur la cible) est à paramétrer dans les préférences de CLion directement (Build > Toolchains).
 On pourra ajouter dans chaque répertoire le code Python nécessaire au projet. Par exemple, dans le répertoire SVM, on peut ajouter un répertoire Python qui contient le code pour calculer les coefficients d'une SVM optimale, adaptée au problème.
 
+**Il est très vivement recommandé d'utiliser CLion comme IDE et gcc comme compilateur.**.
 
 # Cible
 
@@ -138,7 +131,7 @@ Ils seront automatiquement inscrits dans le fichier généré par write_csv.
 - ANN : élaborer un réseau de neurones artificiel optimal, implémenter le réseau en C++ pour prédire sur la cible.  
 
 
-# Objectifs et évaluation --> 18/01
+# Objectifs et évaluation --> 18/01/2022
 
 ## Objectifs :
 
@@ -167,7 +160,7 @@ Ils seront automatiquement inscrits dans le fichier généré par write_csv.
 9. (facultatif) Comparer vos implémentations avec TensorFlow sur Raspberry Pi.
 10. (obligatoire) Comparer les approches et faire un tableau synthétique des caractéristiques et des performances de chacune approche SVM à une approche NN. 
 
-## Évaluation pour le 18/01 (dépôt Moodle) :
+## Évaluation pour le 18/01/2022 (dépôt Moodle) :
 
 - Rapport au format PDF police 11 de 10 pages maximum qui rend compte précisément de votre travail.
 - Le code source (C++/Python/Matlab) 
