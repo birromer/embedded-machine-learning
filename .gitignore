@@ -32,3 +32,5 @@ DATASETS/Music
 *.exe
 *.out
 *.app
+cmake-debug*/
+cmake-release*/
