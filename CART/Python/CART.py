@@ -110,3 +110,6 @@ class CartTree:
                 return self.right._predict(xfeature)
         else:
             return self.label
+
+#TODO GENERATE C++ CODE TO TAKE THE DECISION !
+#TODO TO GENERATE, OVERLOAD __str__ in this class and use a prefix walk of the tree.

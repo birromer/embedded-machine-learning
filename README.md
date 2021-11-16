@@ -1,10 +1,9 @@
-
+[[_TOC_]]
 
 # Embedded Machine Learning
 
 Ce projet GitLab est la base du code que vous devez rendre sur Moodle. Il faut en respecter l'esprit et l'organisation.
 
-[[_TOC_]]
 
 # Embarquer la prédiction issue de l'apprentissage automatique ?
 
@@ -59,7 +58,7 @@ Les styles musicaux sont :
 
 Ce projet utilise nécessairement :
 - un compilateur C++ à la norme 20,
-- cmake (>=3.18),
+- cmake (>=3.16),
 - Python 3.9 et Scikit Learn.
 
 CMake est utilisé pour construire les exécutables du projet. L'utilisation d'un compilateur local, d'un cross-compilateur ou d'un compilateur distant (sur la cible) est à paramétrer dans les préférences de CLion directement (Build > Toolchains).
@@ -85,18 +84,18 @@ Il sera possible d'ajouter à ces éléments TensorFlow Lite et d'autres outils 
 
 DATASETS contient les ensembles de données utilisées pour apprendre et tester les algorithmes implémentés. 
 Pour le dépôt Git, on n'a pas gardé tous les extraits musicaux, afin de na pas encombrer inutilement les disques.
-[À vous de télécharger les données complètes ici.](http://marsyas.info/downloads/datasets.html) 
+[À vous de télécharger les données complètes ici au format AU.](http://marsyas.info/downloads/datasets.html) 
 
 ## Helpers 
 
 Helpers contient un ensemble de fonctionnalités utiles au développement :
-- Lire des fichiers .wav ou .au (au_reading.h, wav_reading.h),
-- Afficher des vecteurs ou des tableaux facilement (print_helpers.h),
-- Sélectionner des fichiers pour l'entraînement et le test et en garder la trace (file_helpers),
-- Calculer une transformée de Fourier rapide (signal.h),
-- Manipuler facilement des styles sous la forme d'un énuméré plutôt que des entiers (music_style_helpers).
-- Définir des types ad-hoc pour le signal et les features (etypes.h) et avoir la possibilité de compiler rapidement en simple ou en double précision,
-- Définir des variables globales (globals.h).
+- **au_reading.h** et **wav_reading.h** Lire des fichiers .wav ou .au ,
+- **print_helpers.h** Afficher des vecteurs ou des tableaux facilement ,
+- **file_helpers.h** Sélectionner des fichiers pour l'entraînement et le test et en garder la trace,
+- **signal.h** Calculer une transformée de Fourier rapide,
+- **music_style_helpers.h** Manipuler facilement des styles sous la forme d'un énuméré plutôt que des entiers.
+- **etypes.h** Définir des types ad-hoc pour le signal (DataVector) et les features et avoir la possibilité de compiler rapidement en simple ou en double précision.
+- **globals.h** Définir des variables globales.
 
 
 ## Extraction
@@ -104,7 +103,7 @@ Helpers contient un ensemble de fonctionnalités utiles au développement :
 Ce répertoire contient un cadre de code pour l'extraction de paramètres. 
 Celle-ci est nécessaire sur votre machine et sur la cible : en effet, pour prédire une classe d'appartenance, le système embarqué doit être capable de générer les paramètres. 
 
-Tel quel, l'exécutable de ce répertoire produit un fichier de paramètres au format CSV (dans cmake-build-debug/Extraction) formaté avec entêtes. 
+Tel quel, l'exécutable de ce répertoire produit un fichier de paramètres au format CSV (dans cmake-build-debug/Extraction) formaté avec entêtes. **Il est donc inutile de modifier les sections qui ne comportent pas de //TODO**. Ces sections sont repérables facilement sous CLion (en vert clair dans le code ou en liseret dans l'ascenceur). 
 
 Chaque colonne est nommée et le nom désigne un paramètre particulier : 
 - BINAVG3 est la moyenne du bin 3 de la STFT partiquée sur un échantillon de musique.
@@ -145,11 +144,12 @@ Ils seront automatiquement inscrits dans le fichier généré par write_csv.
    2. sans utiliser de bibliothèques externes
    3. sur votre machine et sur la cible embarquée (dans notre cas Raspberry Pi 4). 
 2. (obligatoire) Veiller à donner la preuve que le code fonctionne sur la cible. 
-3. (obligatoire) Calculer et mesurer les complexités temporelle et mémoire de vos algorithmes. 
-4. (obligatoire) Vérifier la performance de chaque classificateur embarqué sur les fichiers de test sélectionnés avant l'entraînement.
+3. (obligatoire) Évaluer (et mesurer) les complexités temporelle et mémoire de vos algorithmes. 
+4. (obligatoire) Vérifier la performance de chaque classificateur embarqué sur les fichiers de test sélectionnés avant l'entraînement afin de les comparer.
 5. Programmer une extraction de paramètres en C++ performante :
-   1. (obligatoire) efficace dans son exécution (1 Go de données musicales peuvent être traitées en 60 secondes ou moins), 
-   2. minimale en termes de paramètres significatifs générés pour l'apprentissage : 
+   1. (obligatoire) compléter le fichier au_reading.h afin de [convertir les fichiers AU du dataset en DataVector en C++](https://en.wikipedia.org/wiki/Au_file_format).
+   2. (obligatoire) efficace dans son exécution (1 Go de données musicales peuvent être traitées en 60 secondes ou moins), 
+   3. minimale en termes de paramètres significatifs générés pour l'apprentissage : 
       1. (obligatoire) approche STFT 
       2. (facultatif) approche MFCC  
 6. Programmer des arbres de décision :

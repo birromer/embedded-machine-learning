@@ -59,7 +59,6 @@ void ite_dit_fft(std::vector<Complex> &x) {
         std::size_t step = stages - stage;
         std::size_t halfSize = currentSize / 2;
         for (std::size_t k = 0; k < problemSize; k = k + currentSize) {
-            //for (std::size_t k = 0; k <= problemSize - currentSize; k = k + currentSize) {
             for (std::size_t j = 0; j < halfSize; j++) {
                 auto u = x[k + j];
                 auto v = x[k + j + halfSize] * tf[j * (1 << step)];

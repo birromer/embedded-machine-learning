@@ -1,0 +1,1 @@
+/usr/local/Cellar/gcc/11.2.0/bin/g++-11   -O3  -Wall -Wextra -std=c++20 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/EXTRACTION.dir/fearures_extraction.cpp.o CMakeFiles/EXTRACTION.dir/main.cpp.o -o EXTRACTION 
