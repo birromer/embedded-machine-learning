@@ -32,8 +32,7 @@ DATASETS/Music
 *.exe
 *.out
 *.app
-cmake-debug*/
-cmake-release*/
+cmake-build-*/
 .idea/
 
 .DS_store

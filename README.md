@@ -137,6 +137,30 @@ Ils seront automatiquement inscrits dans le fichier généré par write_csv.
 
 # Objectifs et évaluation --> 18/01/2022
 
+## Programmation des séances 
+
+- Présentation du cours (1h)
+- Extraction des paramètres via STFT (3h) pour utilisation avec tous les algorithmes suivants.
+- Arbre de décision (2h) : 
+  - élaboration d'un arbre de décision de type CART (Python brut et sklearn),
+  - génération automatique du code de prise de décision en C++,
+  - programmation sur la cible,
+  - tests sur la cible.
+- Séparateur à Vaste Marge (SVM) (3h) :
+  - élaboration du classificateur, 
+  - extraction des coefficients,
+  - programmation de la prédiction sur la cible,
+  - tests sur la cible. 
+- Réseaux de neurones (ANN) (3h)
+  - élaboration du classificateur,
+  - programmation de la prédiction sur la cible,
+  - tests sur la cible.
+- Améliorations (4h)
+  - MFCC plutôt que STFT pour limiter le nombre de paramètres d'entrée,
+  - Implémentation de la prédiction via Random Forest en C++. 
+  - Utiliser le paradigme objet pour programmer les réseaux de neurones en C++.
+  - Programmer sur la cible en utilisant le moteur TensorFlow Light. 
+  
 ## Objectifs :
 
 1. (obligatoire) Implémenter en C++-20 
