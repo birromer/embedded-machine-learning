@@ -21,9 +21,7 @@
 #include <fstream>
 #include <cstdio>
 #include <cmath>
-
 #include <string>
-#include <iostream>
 #include <filesystem>
 #include <vector>
 #include "../global.h"
@@ -209,11 +207,11 @@ void wavFileDetails(const std::string fileName) {
     header->data = std::make_shared<chunk>(data_chunk);
     std::cout << "(36-39) Data Marker: " << header->data->fcc << std::endl;
     std::cout << "(40-43) Size of data : "
-            << header->data->cb_size
-            << " B, "
-            << header->data->cb_size / (1.0 * (1 << 20))
-            << " MiB"
-            << std::endl;
+              << header->data->cb_size
+              << " B, "
+              << header->data->cb_size / (1.0 * (1 << 20))
+              << " MiB"
+              << std::endl;
 
     // calculate no.of samples
     long num_samples = (8 * header->data->cb_size) / (header->fmt_data->channels * header->fmt_data->bits_per_sample);
@@ -224,12 +222,11 @@ void wavFileDetails(const std::string fileName) {
 
     // calculate duration of file
     float duration_in_seconds = (float) header->riff->cb_size / header->fmt_data->bytes_rate;
-    std::cout <<  "Approx.Duration in seconds: " <<  duration_in_seconds << std::endl;
+    std::cout << "Approx.Duration in seconds: " << duration_in_seconds << std::endl;
     fclose(fin);
 }
 
-std::vector<Complex> readWavFile(const std::string fileName)
-{
+std::vector<Complex> readWavFile(const std::string fileName) {
     FILE *fin = fopen(fileName.c_str(), "rb");
     std::ifstream myFile(fileName);
     std::vector<Complex> data;
@@ -239,10 +236,10 @@ std::vector<Complex> readWavFile(const std::string fileName)
     // std::cout << data_size << std::endl;
     uint8_t lower_bits;
     uint8_t higher_bits;
-    for (std::size_t k = 0; k < data_size/2; k++){
+    for (std::size_t k = 0; k < data_size / 2; k++) {
         myFile.read(reinterpret_cast<char *>(&higher_bits), sizeof(uint8_t));
         myFile.read(reinterpret_cast<char *>(&lower_bits), sizeof(uint8_t));
-        data.push_back(static_cast<Complex>((signed short)((higher_bits << 8)+lower_bits)));
+        data.push_back(static_cast<Complex>((signed short) ((higher_bits << 8) + lower_bits)));
     }
     myFile.close();
     fclose(fin);
@@ -250,7 +247,7 @@ std::vector<Complex> readWavFile(const std::string fileName)
 }
 
 void readWavDir(std::string path) {
-    for (const auto &entry : fs::directory_iterator(path))
+    for (const auto &entry: fs::directory_iterator(path))
         std::cout << entry.path() << std::endl;
 }
 

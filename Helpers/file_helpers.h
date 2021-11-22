@@ -44,7 +44,7 @@ select_train_test_files(std::vector<std::filesystem::path> files, double ratio) 
     std::random_device random_device;
     //std::mt19937 engine{66};
     std::mt19937 engine{random_device()};
-    std::uniform_int_distribution<int> dist(0, files.size()-1);
+    std::uniform_int_distribution<int> dist(0, files.size() - 1);
     std::set<std::filesystem::path> training_files_set;
     std::set<int> indexes;
     for (std::size_t k = 0; k < training_size; k++) {
@@ -64,7 +64,6 @@ select_train_test_files(std::vector<std::filesystem::path> files, double ratio) 
     std::copy(training_files_set.cbegin(), training_files_set.cend(), std::back_inserter(training_files));
     return std::make_pair(training_files, testing_files);
 }
-
 
 
 #endif //FILE_HELPERS_H

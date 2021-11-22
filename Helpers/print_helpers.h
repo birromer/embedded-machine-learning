@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include "etypes.h"
+
 template<typename T>
 std::ostream &operator<<(std::ostream &s, const std::vector<T> &v) {
     s << '[';
@@ -32,4 +33,5 @@ std::ostream &operator<<(std::ostream &s, const std::array<T, SIZE> &a) {
     }
     return s << ']';
 }
+
 #endif //PRINT_HELPERS_H

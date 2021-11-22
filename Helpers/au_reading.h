@@ -1,9 +1,6 @@
 #ifndef AU_READING_H
 #define AU_READING_H
 
-#include "globals.h"
-
-//TODO USE THESE HEADERS ELEMENTS TO READ .AU FILES
 //32 bit word (unsigned) 	field 	Description/Content Hexadecimal numbers in C notation
 //0 	                    magic number 	the value 0x2e736e64 (four ASCII characters ".snd")
 //1 	                    data offset 	the offset to the data in bytes, must be divisible by 8. The minimum valid number is 24 (decimal), since this is the header length (six 32-bit words) with no space reserved for extra information (the annotation field). The minimum valid number with an annotation field present is 32 (decimal).
@@ -37,11 +34,10 @@
 //5 	channels 	the number of interleaved channels, e.g., 1 for mono, 2 for stereo; more channels possible, but may not be supported by all readers.
 
 
-DataVector readAuFile(const std::string fileName) {
-    //TODO
-    DataVector data;
-    return data;
-}
+DataVector readAuFile(std::filesystem::path &file_path) {
+    DataVector dataVector;
+    return dataVector;
+};
 
 
 #endif //AU_READING_H

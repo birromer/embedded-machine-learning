@@ -55,6 +55,33 @@ MUSIC_STYLE music_style_from_string(std::string str) {
     }
 }
 
+MUSIC_STYLE music_style_from_int(unsigned int s) {
+    switch (s) {
+        case 0:
+            return MUSIC_STYLE::BLUES;
+        case 1:
+            return MUSIC_STYLE::CLASSICAL;
+        case 2:
+            return MUSIC_STYLE::COUNTRY;
+        case 3:
+            return MUSIC_STYLE::DISCO;
+        case 4:
+            return MUSIC_STYLE::HIPHOP;
+        case 5:
+            return MUSIC_STYLE::JAZZ;
+        case 6:
+            return MUSIC_STYLE::METAL;
+        case 7:
+            return MUSIC_STYLE::POP;
+        case 8:
+            return MUSIC_STYLE::REGGAE;
+        case 9:
+            return MUSIC_STYLE::ROCK;
+        default:
+            throw std::logic_error("to_int: MUSIC_STYLE enum values not found.");
+    }
+}
+
 std::ostream &operator<<(std::ostream &os, MUSIC_STYLE music_style) {
     os << music_style_to_string(music_style);
     return os;

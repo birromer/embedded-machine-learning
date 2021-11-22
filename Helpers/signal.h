@@ -13,9 +13,9 @@
 #include <vector>
 
 
-constexpr std::array<Complex,  FFT_SIZE> twiddle_factors() {
-    std::array<Complex, FFT_SIZE> t;
-    for (std::size_t k = 0; k < FFT_SIZE; k++) {
+constexpr std::array<Complex, N / 2> twiddle_factors() {
+    std::array<Complex, N / 2> t;
+    for (std::size_t k = 0; k < N / 2; k++) {
         t[k] = std::polar(1.0, -2.0 * std::numbers::pi * k / N);
     }
     return t;
@@ -59,6 +59,7 @@ void ite_dit_fft(std::vector<Complex> &x) {
         std::size_t step = stages - stage;
         std::size_t halfSize = currentSize / 2;
         for (std::size_t k = 0; k < problemSize; k = k + currentSize) {
+            //for (std::size_t k = 0; k <= problemSize - currentSize; k = k + currentSize) {
             for (std::size_t j = 0; j < halfSize; j++) {
                 auto u = x[k + j];
                 auto v = x[k + j + halfSize] * tf[j * (1 << step)];
@@ -81,11 +82,12 @@ constexpr std::array<real, N> hamming_window() {
 }
 
 
-void windowing(const std::array<real, N> &w, std::vector<Complex> &s) {
-    std::transform(s.begin(),
-                   s.end(),
+template<typename T>
+void windowing(const std::array<real, N> &w, std::vector<T> &s) {
+    std::transform(s.cbegin(),
+                   s.cend(),
                    s.begin(),
-                   [&, index = -1](Complex c)mutable {
+                   [&, index = -1](T c)mutable {
                        index++;
                        return w[index] * c;
                    });

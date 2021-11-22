@@ -57,7 +57,7 @@ void write_csv(std::string filename,
 
 
 std::map<FTYPE, DataVector> compute_features_for(std::filesystem::path &file_path) {
-    auto data = readAuFile(file_path.string());
+    auto data = readAuFile(file_path);
     auto features = stft(data);
     return features;
 }
@@ -66,7 +66,7 @@ void compute_set_of_features(std::vector<std::filesystem::path> &files) {
     std::vector<std::pair<std::filesystem::path, std::map<FTYPE, DataVector>>> all_features;
     for (auto file: files) {
         std::cout << "Reading --> " << file.filename() << std::endl;
-        auto data = readAuFile(file.string());
+        auto data = readAuFile(file);
         auto features = stft(data);
         all_features.push_back(std::make_pair(file, features));
         //std::cout << "Training parameters size --> " << features[FTYPE::BINAVG].size() << "x" << features[FTYPE::BINSTDEV].size() << std::endl;

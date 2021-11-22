@@ -1,7 +1,3 @@
-//
-// Created by o on 12/11/2021.
-//
-
 #ifndef EML_MUSIC_STYLE_HELPERS_H
 #define EML_MUSIC_STYLE_HELPERS_H
 
@@ -21,6 +17,9 @@ enum class MUSIC_STYLE {
 std::string music_style_to_string(const MUSIC_STYLE &s);
 
 MUSIC_STYLE music_style_from_string(std::string str);
+
+MUSIC_STYLE music_style_from_int(unsigned int s);
+
 
 std::ostream &operator<<(std::ostream &os, MUSIC_STYLE music_style);
 
