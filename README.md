@@ -47,15 +47,14 @@ Une réponse simple à toute cette problématique est [TensorFlow Lite](https://
 - S'affranchir des dépendances qui impliquent des évolutions pas nécessairement souhaitées à vos produits et parfois des (re)qualifications coûteuses,
 
 - Maîtriser entièrement sa conception et son développement logiciel.
-
-
+  
   Les conséquences de ces choix militants :
 
-  - création de compétences qui permettent de faire évoluer les entreprises,
-  - acquisition de souveraineté des produits,
-  - création de valeur.
+- création de compétences qui permettent de faire évoluer les entreprises,
 
+- acquisition de souveraineté des produits,
 
+- création de valeur.
 
 # Contexte d'apprentissage
 
@@ -67,6 +66,7 @@ Nous disposons pour cela de plusieurs bases de données. La plus simple à utili
 
 Les styles musicaux sont :
 0. blues
+
 1. classique
 2. country
 3. disco
@@ -80,6 +80,7 @@ Les styles musicaux sont :
 # Standards
 
 Ce projet utilise nécessairement :
+
 - un compilateur C++ à la norme 20,
 - cmake (>=3.16),
 - Python 3.9 et Scikit Learn.
@@ -112,6 +113,7 @@ Pour le dépôt Git, on n'a pas gardé tous les extraits musicaux, afin de na pa
 ## Helpers
 
 Helpers contient un ensemble de fonctionnalités utiles au développement :
+
 - **au_reading.h** et **wav_reading.h** Lire des fichiers .wav ou .au ,
 - **print_helpers.h** Afficher des vecteurs ou des tableaux facilement ,
 - **file_helpers.h** Sélectionner des fichiers pour l'entraînement et le test et en garder la trace,
@@ -119,7 +121,6 @@ Helpers contient un ensemble de fonctionnalités utiles au développement :
 - **music_style_helpers.h** Manipuler facilement des styles sous la forme d'un énuméré plutôt que des entiers.
 - **etypes.h** Définir des types ad-hoc pour le signal (DataVector) et les features et avoir la possibilité de compiler rapidement en simple ou en double précision.
 - **globals.h** Définir des variables globales.
-
 
 ## Extraction
 
@@ -129,11 +130,11 @@ Celle-ci est nécessaire sur votre machine et sur la cible : en effet, pour pré
 Tel quel, l'exécutable de ce répertoire produit un fichier de paramètres au format CSV (dans cmake-build-debug/Extraction) formaté avec entêtes. **Il est donc inutile de modifier les sections qui ne comportent pas de //TODO**. Ces sections sont repérables facilement sous CLion (en vert clair dans le code ou en liseret dans l'ascenceur).
 
 Chaque colonne est nommée et le nom désigne un paramètre particulier :
+
 - BINAVG3 est la moyenne du bin 3 de la STFT partiquée sur un échantillon de musique.
 - BINSTDEV252 est l'écart type du bin 252 de la STFT pratiquée sur un échantillon de musique.
 
 Chaque ligne se termine par le style de la musique et le chemin vers le fichier.
-
 
 Par exemple :
 
@@ -143,10 +144,11 @@ BINAVG0,BINAVG1,BINAVG2,BINAVG3,...., BINSTDEV252,BINSTDEV253,BINSTDEV254,BINSTD
 ```
 
 Si d'autres paramètres devaient être créés, il suffit :
+
 1. de leur conférer un nom dans l'énuméré FTYPE (etypes.h),
 2. de les calculer,
 3. de les insérer dans la variable feature d'après leut type.
-`std::map<FTYPE, DataVector> features;`
+   `std::map<FTYPE, DataVector> features;`
 
 Ils seront automatiquement inscrits dans le fichier généré par write_csv.
 
