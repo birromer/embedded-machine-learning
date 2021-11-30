@@ -47,8 +47,6 @@ struct Wave_header {
     U32  magic_num;
     U32  offset;
     U32 data_size;
-    
-
 };
 
 DataVector readAuFile(const std::string fileName) {

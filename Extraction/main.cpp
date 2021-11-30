@@ -7,12 +7,13 @@
 
 int main() {
     auto beg = std::chrono::high_resolution_clock::now();
-    auto dirs = alpha_dir_listing("../../data/");
+    auto dirs = alpha_dir_listing("../data/");
     std::vector<std::filesystem::path> training_files;
     std::vector<std::filesystem::path> testing_files;
 
     // Select random files of each music style
     for (auto dir_path: dirs) {
+        std::cout << dir_path << std::endl;
         auto files = alpha_files_listing(dir_path);
         std::vector<std::filesystem::path> training;
         std::vector<std::filesystem::path> testing;
