@@ -51,7 +51,6 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
 
         stddev.push_back(chunck_1_stddev);
         stddev.push_back(chunck_2_stddev);
-        }
     }
 
     std::map<FTYPE, DataVector> features;

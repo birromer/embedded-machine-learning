@@ -55,7 +55,6 @@ DataVector readAuFile(const std::string fileName) {
     FILE *fin = fopen(fileName.c_str(), "rb");
     std::ifstream myFile(fileName);
     DataVector data;
-    myFile.seekg(24); // zap first 6 uint32 headers
     U32  magic_num;
     myFile.read(reinterpret_cast<char *>(&magic_num), sizeof(U32));
     U32  offset;
