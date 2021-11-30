@@ -32,12 +32,52 @@
 //
 //4 	sample rate 	the number of samples/second, e.g., 8000
 //5 	channels 	the number of interleaved channels, e.g., 1 for mono, 2 for stereo; more channels possible, but may not be supported by all readers.
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+#include <cmath>
+#include <string>
+#include <filesystem>
+#include <vector>
+#include "globals.h"
 
+typedef uint32_t U32;
 
-DataVector readAuFile(std::filesystem::path &file_path) {
-    DataVector dataVector;
-    return dataVector;
+struct Wave_header {
+    U32  magic_num;
+    U32  offset;
+    U32 data_size;
+    
+
 };
+
+DataVector readAuFile(const std::string fileName) {
+    FILE *fin = fopen(fileName.c_str(), "rb");
+    std::ifstream myFile(fileName);
+    DataVector data;
+    myFile.seekg(24); // zap first 6 uint32 headers
+    U32  magic_num;
+    myFile.read(reinterpret_cast<char *>(&magic_num), sizeof(U32));
+    U32  offset;
+    myFile.read(reinterpret_cast<char *>(&offset), sizeof(U32));
+    U32 data_size;
+    myFile.read(reinterpret_cast<char *>(&data_size), sizeof(U32));
+    std::cout << "data size"<<data_size << std::endl;
+    myFile.seekg(12); // zap first 3 uint32 headers
+    uint8_t lower_bits;
+    uint8_t higher_bits;
+    for (std::size_t k = 0; k < data_size / 2; k++) {
+        myFile.read(reinterpret_cast<char *>(&higher_bits), sizeof(uint8_t));
+        myFile.read(reinterpret_cast<char *>(&lower_bits), sizeof(uint8_t));
+        data.push_back(static_cast<real>((signed short) ((higher_bits << 8) + lower_bits)));
+    }
+    myFile.close();
+    fclose(fin);
+    return data;
+}
+
+
+
 
 
 #endif //AU_READING_H
