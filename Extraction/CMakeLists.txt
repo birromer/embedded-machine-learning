@@ -1,1 +1,1 @@
-add_executable(EXTRACTION fearures_extraction.cpp main.cpp)
+add_executable(EXTRACTION features_extraction.cpp main.cpp)
