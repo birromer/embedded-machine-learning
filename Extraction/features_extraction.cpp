@@ -6,10 +6,54 @@
 #include "../Helpers/au_reading.h"
 
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
-    //TODO compute STFT with the help of signal.h
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
-    //TODO compute bins average and stddev
+
+
+    for (DataVector::const_iterator it; it != signal.end(); it+=N) {
+
+        // get the two overlapping chuncks from the sliding window
+        std::vector<Complex> v1(it, it+N);
+        std::vector<Complex> v2(it+N/2, it+N+N/2);
+
+        auto w = hamming_window();
+        windowing(w, v1);
+        windowing(w, v2);
+
+        // compute the fft
+        ite_dit_fft(v1);
+        ite_dit_fft(v2);
+
+        // compute the magnitude fft's output (which is a complex, with angle and phase)
+        DataVector v1_abs = DataVector(N);
+        DataVector v2_abs = DataVector(N);
+
+        for (std::size_t i=0; i<v1.size(); i++) {
+            v1_abs.push_back(abs(v1[i]));
+            v2_abs.push_back(abs(v2[i]));
+        }
+
+        // compute the average of the magnitudes
+        auto chunck_1_avg = std::accumulate(v1_abs.begin(), v1_abs.end(), 0)/v1_abs.size();
+        auto chunck_2_avg = std::accumulate(v1_abs.begin(), v1_abs.end(), 0)/v1_abs.size();
+
+        avg.push_back(chunck_1_avg);
+        avg.push_back(chunck_2_avg);
+
+        // use the average to compute the std deviation
+        auto chunck_1_stddev = 0;
+        auto chunck_2_stddev = 0;
+
+        for (std::size_t i=0; i < v1_abs.size(); i++) {
+            chunck_1_stddev += pow(v1_abs.at(i) - chunck_1_avg, 2);
+            chunck_2_stddev += pow(v2_abs.at(i) - chunck_1_avg, 2);
+        }
+
+        stddev.push_back(chunck_1_stddev);
+        stddev.push_back(chunck_2_stddev);
+        }
+    }
+
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
     features.insert({FTYPE::BINAVG, DataVector(avg.size())});
