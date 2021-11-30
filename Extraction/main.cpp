@@ -7,7 +7,7 @@
 
 int main() {
     auto beg = std::chrono::high_resolution_clock::now();
-    auto dirs = alpha_dir_listing("../../DATASETS/Music");
+    auto dirs = alpha_dir_listing("../../data/");
     std::vector<std::filesystem::path> training_files;
     std::vector<std::filesystem::path> testing_files;
 
