@@ -8,9 +8,11 @@
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
+    std::cout << "stft called with signal of size " << signal.size() << std::endl;
 
-
-    for (DataVector::const_iterator it; it != signal.end()-N-1; it+=N) {
+//    int aa = 0;
+    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-N-1; it+=N) {
+//        std::cout << "processing signal " << aa++ << std::endl;
 
         // get the two overlapping chuncks from the sliding window
         std::vector<Complex> v1(it, it+N);
@@ -52,6 +54,8 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         stddev.push_back(chunck_1_stddev);
         stddev.push_back(chunck_2_stddev);
     }
+
+    std::cout << "finished iterating signal" << std::endl;
 
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
@@ -107,11 +111,15 @@ std::map<FTYPE, DataVector> compute_features_for(std::filesystem::path &file_pat
 
 void compute_set_of_features(std::vector<std::filesystem::path> &files) {
     std::vector<std::pair<std::filesystem::path, std::map<FTYPE, DataVector>>> all_features;
+    int i=0;
     for (auto file: files) {
         std::cout << "Reading --> " << file.filename() << std::endl;
         auto data = readAuFile(file);
+        std::cout << "chegou " << i++ << std::endl;
         auto features = stft(data);
+        std::cout << "chegou " << i++ << std::endl;
         all_features.push_back(std::make_pair(file, features));
+        std::cout << "chegou " << i++ << std::endl;
         //std::cout << "Training parameters size --> " << features[FTYPE::BINAVG].size() << "x" << features[FTYPE::BINSTDEV].size() << std::endl;
     }
     std::cout << "Ready to write file --> " << "features.csv" << std::endl;
