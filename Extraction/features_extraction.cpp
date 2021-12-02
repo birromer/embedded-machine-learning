@@ -10,52 +10,22 @@ using namespace std::chrono;
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
-    std::cout << "STFT called with signal of size " << signal.size() << std::endl;
 
-    auto time_complex = high_resolution_clock::now() - high_resolution_clock::now();
-    auto time_windowing = high_resolution_clock::now() - high_resolution_clock::now();
-    auto time_fft = high_resolution_clock::now() - high_resolution_clock::now();
-    auto time_magnitude = high_resolution_clock::now() - high_resolution_clock::now();
-    auto time_average = high_resolution_clock::now() - high_resolution_clock::now();
-    auto time_stddev = high_resolution_clock::now() - high_resolution_clock::now();
-
-    int aa =0;
-
-//    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-2*N && it - signal.begin() <= FEAT_N; it+=N/2) {
-    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-2*N; it+=N/2) {
-//        std::cout << "interation: " << aa++ << std::endl;
+    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-2*N && avg.size() < FEAT_N; it+=N/2) {
 
         // get the two overlapping chuncks from the sliding window
-        auto start = high_resolution_clock::now();
         std::vector<Complex> v1(it, it+N);
         std::vector<Complex> v2(it+(N/2), it+(N+N/2));
 
-        if (aa == 2047) {
-          for (Complex c : v1) {
-              std::cout << c.real() << " " << c.imag() << std::endl;
-          }
-        }
-        int temp;
-        std::cin >> temp;
-        auto stop = high_resolution_clock::now();
-        time_complex += (stop - start);
-
-        start = high_resolution_clock::now();
         auto w = hamming_window();
         windowing(w, v1);
         windowing(w, v2);
-        stop = high_resolution_clock::now();
-        time_windowing += (stop-start);
 
         // compute the fft
-        start = high_resolution_clock::now();
         ite_dit_fft(v1);
         ite_dit_fft(v2);
-        stop = high_resolution_clock::now();
-        time_fft += (stop-start);
 
         // compute the magnitude fft's output (which is a complex, with angle and phase)
-        start = high_resolution_clock::now();
         DataVector v1_abs = DataVector(N);
         DataVector v2_abs = DataVector(N);
 
@@ -63,21 +33,15 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
             v1_abs.push_back(abs(v1[i]));
             v2_abs.push_back(abs(v2[i]));
         }
-        stop = high_resolution_clock::now();
-        time_average += (stop-start);
 
         // compute the average of the magnitudes
-        start = high_resolution_clock::now();
         auto chunck_1_avg = std::accumulate(v1_abs.begin(), v1_abs.end(), 0)/v1_abs.size();
         auto chunck_2_avg = std::accumulate(v2_abs.begin(), v2_abs.end(), 0)/v2_abs.size();
-        stop = high_resolution_clock::now();
-        time_stddev += ((stop-start));
 
         avg.push_back(chunck_1_avg);
         avg.push_back(chunck_2_avg);
 
         // use the average to compute the std deviation
-        start = high_resolution_clock::now();
         auto chunck_1_stddev = 0;
         auto chunck_2_stddev = 0;
 
@@ -89,15 +53,6 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         stddev.push_back(chunck_1_stddev);
         stddev.push_back(chunck_2_stddev);
     }
-
-    std::cout << "finished iterating signal" << std::endl;
-    std::cout << "time for each part:" << std::endl;
-    std::cout << "complex: " << time_complex.count() << std::endl;
-    std::cout << "windowing: " << time_windowing.count() << std::endl;
-    std::cout << "fft: " << time_fft.count() << std::endl;
-    std::cout << "magnitude" << time_fft.count() << std::endl;
-    std::cout << "average: " << time_average.count() << std::endl;
-    std::cout << "sttdev: " << time_stddev.count() << std::endl;
 
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
