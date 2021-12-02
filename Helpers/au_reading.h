@@ -59,9 +59,11 @@ DataVector readAuFile(const std::string fileName) {
     //check magic number
     if (swapped != 0x2e736e64)
         throw std::runtime_error("Wrong magic number.");
+
     //reading offset
     U32  offset;
     myFile.read(reinterpret_cast<char *>(&offset), sizeof(U32));
+
     //reading data_size
     U32 data_size;
     U32 data_size_swapped;
@@ -71,6 +73,7 @@ DataVector readAuFile(const std::string fileName) {
                     ((data_size>>8)&0xff00) | // move byte 2 to byte 1
                     ((data_size<<24)&0xff000000); // byte 0 to byte 3
     std::cout << "Data size: " << data_size_swapped << std::endl;
+
     //reading encoding
     U32 enc;
     U32 swapped_enc;
@@ -80,19 +83,22 @@ DataVector readAuFile(const std::string fileName) {
                     ((enc>>8)&0xff00) | // move byte 2 to byte 1
                     ((enc<<24)&0xff000000); // byte 0 to byte 3
     std::cout <<"encodage: "<< swapped_enc<< std::endl;
+
     //reading two more header words
     myFile.seekg(sizeof(U32)*2); // zap first 3 uint32 headers
+
     //reading data
-    uint16_t word;
-    uint16_t word_swapped;
-    for (std::size_t k = 0; k < data_size_swapped; k++) {
+    U32 word;
+    U32 word_swapped;
+    for (std::size_t k = 0; k <= data_size_swapped/2; k++) {
         myFile.read(reinterpret_cast<char *>(&word), sizeof(uint16_t)); //in the case where data are encoding with 16 bits, but not sure
         word_swapped = (word>>8) | (word<<8);
         data.push_back(word_swapped);
     }
+
     myFile.close();
     fclose(fin);
-    std::cout<<"Reading data finished!!!"<<std::endl;
+    std::cout<<"Reading data finished!!!"<< std::endl;
     return data;
 }
 
