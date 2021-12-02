@@ -44,53 +44,55 @@
 typedef uint32_t U32;
 typedef uint16_t U16;
 
-struct Wave_header {
-    U32  magic_num;
-    U32  offset;
-    U32 data_size;
-};
-
 DataVector readAuFile(const std::string fileName) {
     FILE *fin = fopen(fileName.c_str(), "rb");
     std::ifstream myFile(fileName);
     DataVector data;
-
-    U16  magic_num_lo;
-    U16  magic_num_hi;
-    myFile.read((char*)&magic_num_hi, sizeof(U16));
-    myFile.read((char*)&magic_num_lo, sizeof(U16));
-
-    U32 magic_num = ((U32)magic_num_hi << 16) | (((U32)magic_num_lo) & 0xFFFF);
-
-    if (magic_num != 0x2e736e64)
+    //reading magic number
+    U32 magic_num;
+    U32 swapped;
+    myFile.read(reinterpret_cast<char *>(&magic_num), sizeof(uint32_t));
+    swapped = ((magic_num>>24)&0xff) | // move byte 3 to byte 0
+                    ((magic_num<<8)&0xff0000) | // move byte 1 to byte 2
+                    ((magic_num>>8)&0xff00) | // move byte 2 to byte 1
+                    ((magic_num<<24)&0xff000000); // byte 0 to byte 3
+    //check magic number
+    if (swapped != 0x2e736e64)
         throw std::runtime_error("Wrong magic number.");
-
+    //reading offset
     U32  offset;
     myFile.read(reinterpret_cast<char *>(&offset), sizeof(U32));
-
+    //reading data_size
     U32 data_size;
+    U32 data_size_swapped;
     myFile.read(reinterpret_cast<char *>(&data_size), sizeof(U32));
-
-    std::cout << "Data size: " << data_size << std::endl;
-
+    data_size_swapped = ((data_size>>24)&0xff) | // move byte 3 to byte 0
+                    ((data_size<<8)&0xff0000) | // move byte 1 to byte 2
+                    ((data_size>>8)&0xff00) | // move byte 2 to byte 1
+                    ((data_size<<24)&0xff000000); // byte 0 to byte 3
+    std::cout << "Data size: " << data_size_swapped << std::endl;
+    //reading encoding
+    U32 enc;
+    U32 swapped_enc;
+    myFile.read(reinterpret_cast<char *>(&enc), sizeof(uint32_t));
+    swapped_enc = ((enc>>24)&0xff) | // move byte 3 to byte 0
+                    ((enc<<8)&0xff0000) | // move byte 1 to byte 2
+                    ((enc>>8)&0xff00) | // move byte 2 to byte 1
+                    ((enc<<24)&0xff000000); // byte 0 to byte 3
+    std::cout <<"encodage: "<< swapped_enc<< std::endl;
+    //reading two more header words
     myFile.seekg(sizeof(U32)*2); // zap first 3 uint32 headers
-
-    U16 enc_lo;
-    U16 enc_hi;
-    myFile.read(reinterpret_cast<char *>(&enc_hi), sizeof(U16));
-    myFile.read(reinterpret_cast<char *>(&enc_lo), sizeof(U16));
-
-    std::cout << enc_lo << " " << enc_hi << std::endl;
-
-    uint8_t low;
-    uint8_t high;
-    for (std::size_t k = 0; k < data_size / 2; k++) {
-        myFile.read(reinterpret_cast<char *>(&high), sizeof(uint16_t));
-        myFile.read(reinterpret_cast<char *>(&low), sizeof(uint16_t));
-        data.push_back((static_cast<uint32_t>(high) << 16) | ((static_cast<uint32_t>(low)) & 0xFFFF));
+    //reading data
+    uint16_t word;
+    uint16_t word_swapped;
+    for (std::size_t k = 0; k < data_size_swapped; k++) {
+        myFile.read(reinterpret_cast<char *>(&word), sizeof(uint16_t)); //in the case where data are encoding with 16 bits, but not sure
+        word_swapped = (word>>8) | (word<<8);
+        data.push_back(word_swapped);
     }
     myFile.close();
     fclose(fin);
+    std::cout<<"Reading data finished!!!"<<std::endl;
     return data;
 }
 
