@@ -11,11 +11,11 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
 
-    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-2*N && avg.size() < FEAT_N; it+=N/2) {
+    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-N/2 && avg.size() < FEAT_N/2; it+=N/2) {
 
         // get the two overlapping chuncks from the sliding window
         std::vector<Complex> v1(it, it+N);
-        std::vector<Complex> v2(it+(N/2), it+(N+N/2));
+        std::vector<Complex> v2(it+N/2, it+N+N/2);
 
         auto w = hamming_window();
         windowing(w, v1);
@@ -26,10 +26,10 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         ite_dit_fft(v2);
 
         // compute the magnitude fft's output (which is a complex, with angle and phase)
-        DataVector v1_abs = DataVector(N);
-        DataVector v2_abs = DataVector(N);
+        DataVector v1_abs = DataVector(FFT_SIZE);
+        DataVector v2_abs = DataVector(FFT_SIZE);
 
-        for (std::size_t i=0; i<v1.size(); i++) {
+        for (std::size_t i=0; i<FFT_SIZE; i++) {
             v1_abs.push_back(abs(v1[i]));
             v2_abs.push_back(abs(v2[i]));
         }
@@ -50,9 +50,12 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
             chunck_2_stddev += pow(v2_abs.at(i) - chunck_2_avg, 2);
         }
 
-        stddev.push_back(chunck_1_stddev);
-        stddev.push_back(chunck_2_stddev);
+        stddev.push_back(sqrt(chunck_1_stddev));
+        stddev.push_back(sqrt(chunck_2_stddev));
     }
+
+    std::cout << "size avg: " << avg.size() << std::endl;
+    std::cout << "size stddev: " << stddev.size() << std::endl;
 
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
