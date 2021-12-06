@@ -17,22 +17,10 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
 
     int max_iter = signal.size() / N - 1;
 
-
-    int aa = 0;
-    if (lol) {
-    std::ofstream file("bite_de_yoyo.txt");
     for (DataVector::const_iterator it = signal.begin(); it != signal.begin() + max_iter*N; it+=N) {
-//        std::cout << "iter: " << aa++ << std::endl;
-        aa += 1;
-
         // get the two overlapping chuncks from the sliding window
         std::vector<Complex> v1(it, it+N);
         std::vector<Complex> v2(it+N/2, it+N+N/2);
-
-        for (int i=0; i<v1.size(); i++) {
-//            file << v1[i].real() << " " << v1[i].imag() << " " << signal[i] << std::endl;
-            file << signal[i] << std::endl;
-        }
 
         auto w = hamming_window();
         windowing(w, v1);
@@ -54,18 +42,12 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
             stddev[i] += pow(abs_v2, 2);
         }
     }
-    file.close(); // TODO: TIRAR ESSA BOSTA
-    }
-    lol = false;
 
     for (std::size_t i=0; i<FFT_SIZE; i++) {
         // compute the average of the magnitudes
         avg[i] /= max_iter*2;
         stddev[i] = sqrt(stddev[i]/(max_iter*2) - pow(avg[i],2));
     }
-
-    std::cout << "max_iter: " << max_iter << std::endl;
-    std::cout << "iterations: " << aa << std::endl;
 
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
