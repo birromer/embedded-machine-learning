@@ -5,17 +5,34 @@
 #include "../Helpers/signal.h"
 #include "../Helpers/au_reading.h"
 #include <chrono>
+
 using namespace std::chrono;
+
+bool lol=true;
 
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
+    std::cout << "size avg " << avg.size() << std::endl;
 
-    for (DataVector::const_iterator it = signal.begin(); it != signal.end()-N/2 && avg.size() < FEAT_N/2; it+=N/2) {
+    int max_iter = signal.size() / N - 1;
+
+
+    int aa = 0;
+    if (lol) {
+    std::ofstream file("bite_de_yoyo.txt");
+    for (DataVector::const_iterator it = signal.begin(); it != signal.begin() + max_iter*N; it+=N) {
+//        std::cout << "iter: " << aa++ << std::endl;
+        aa += 1;
 
         // get the two overlapping chuncks from the sliding window
         std::vector<Complex> v1(it, it+N);
         std::vector<Complex> v2(it+N/2, it+N+N/2);
+
+        for (int i=0; i<v1.size(); i++) {
+//            file << v1[i].real() << " " << v1[i].imag() << " " << signal[i] << std::endl;
+            file << signal[i] << std::endl;
+        }
 
         auto w = hamming_window();
         windowing(w, v1);
@@ -26,36 +43,29 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         ite_dit_fft(v2);
 
         // compute the magnitude fft's output (which is a complex, with angle and phase)
-        DataVector v1_abs = DataVector(FFT_SIZE);
-        DataVector v2_abs = DataVector(FFT_SIZE);
-
         for (std::size_t i=0; i<FFT_SIZE; i++) {
-            v1_abs.push_back(abs(v1[i]));
-            v2_abs.push_back(abs(v2[i]));
-        }
+            double abs_v1 = abs(v1[i]);
+            double abs_v2 = abs(v2[i]);
 
+            avg[i] +=  abs_v1;
+            avg[i] +=  abs_v2;
+
+            stddev[i] += pow(abs_v1, 2);
+            stddev[i] += pow(abs_v2, 2);
+        }
+    }
+    file.close(); // TODO: TIRAR ESSA BOSTA
+    }
+    lol = false;
+
+    for (std::size_t i=0; i<FFT_SIZE; i++) {
         // compute the average of the magnitudes
-        auto chunck_1_avg = std::accumulate(v1_abs.begin(), v1_abs.end(), 0)/v1_abs.size();
-        auto chunck_2_avg = std::accumulate(v2_abs.begin(), v2_abs.end(), 0)/v2_abs.size();
-
-        avg.push_back(chunck_1_avg);
-        avg.push_back(chunck_2_avg);
-
-        // use the average to compute the std deviation
-        auto chunck_1_stddev = 0;
-        auto chunck_2_stddev = 0;
-
-        for (std::size_t i=0; i < v1_abs.size(); i++) {
-            chunck_1_stddev += pow(v1_abs.at(i) - chunck_1_avg, 2);
-            chunck_2_stddev += pow(v2_abs.at(i) - chunck_2_avg, 2);
-        }
-
-        stddev.push_back(sqrt(chunck_1_stddev));
-        stddev.push_back(sqrt(chunck_2_stddev));
+        avg[i] /= max_iter*2;
+        stddev[i] = sqrt(stddev[i]/(max_iter*2) - pow(avg[i],2));
     }
 
-    std::cout << "size avg: " << avg.size() << std::endl;
-    std::cout << "size stddev: " << stddev.size() << std::endl;
+    std::cout << "max_iter: " << max_iter << std::endl;
+    std::cout << "iterations: " << aa << std::endl;
 
     std::map<FTYPE, DataVector> features;
     //insert bins average and stddev in features
@@ -63,6 +73,7 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
     features.insert({FTYPE::BINSTDEV, DataVector(stddev.size())});
     std::copy(avg.cbegin(), avg.cend(), features[FTYPE::BINAVG].begin());
     std::copy(stddev.cbegin(), stddev.cend(), features[FTYPE::BINSTDEV].begin());
+
     return features;
 }
 

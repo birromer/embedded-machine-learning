@@ -88,8 +88,8 @@ DataVector readAuFile(const std::string fileName) {
     myFile.seekg(sizeof(U32)*2); // zap first 3 uint32 headers
 
     //reading data
-    U32 word;
-    U32 word_swapped;
+    int16_t word;
+    int16_t word_swapped;
     for (std::size_t k = 0; k <= data_size_swapped/2; k++) {
         myFile.read(reinterpret_cast<char *>(&word), sizeof(uint16_t)); //in the case where data are encoding with 16 bits, but not sure
         word_swapped = (word>>8) | (word<<8);
