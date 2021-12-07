@@ -122,7 +122,7 @@ std::vector<std::pair<std::filesystem::path,std::map<FTYPE, DataVector>>> comput
     }
 
     write_csv(features_path, all_features);
-    if (verbose) std::cout << "features.csv written !" << std::endl;
+    if (verbose) std::cout << features_path << " written !" << std::endl;
 
     return all_features;
 }

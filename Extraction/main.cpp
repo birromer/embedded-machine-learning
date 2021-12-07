@@ -26,11 +26,10 @@ int main() {
     std::cout << "# training -->  " << training_files.size() << std::endl;
     std::cout << "# testing -->  " << testing_files.size() << std::endl;
 
-//    for (auto elem: training_files)
-//        std::cout << "Training --> " << elem << std::endl;
+    for (auto elem: training_files)
+        std::cout << "Training --> " << elem << std::endl;
 
-    std::ofstream paths_file("../data/test_paths.txt");
-
+    std::ofstream paths_file("../data/paths_testing.txt");
     for (auto elem: testing_files) {
         std::cout << "Testing --> " << elem << std::endl;
         paths_file << elem.string() << std::endl;
@@ -41,7 +40,8 @@ int main() {
 //    for (auto file: training_files)
 //        auto f = compute_features_for(file);
 
-    compute_set_of_features(training_files, "features_training.csv", true);
+    compute_set_of_features(training_files, "../data/features_training.csv", true);
+    compute_set_of_features(testing_files, "../data/features_testing.csv", true);
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() << " s" << std::endl;
     return 0;

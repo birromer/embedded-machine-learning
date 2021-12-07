@@ -9,11 +9,8 @@ import graphviz
 from CART import *
 
 # Extract dataset
-dataset = '../../data/features.csv'
+dataset = '../../data/features_training.csv'
 crop_df = pd.read_csv(dataset, header=0)
-
-print(crop_df.columns.values)
-print(crop_df.Style.values)
 
 print(crop_df.head)
 

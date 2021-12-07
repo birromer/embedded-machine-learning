@@ -72,7 +72,7 @@ DataVector readAuFile(const std::string fileName) {
                     ((data_size<<8)&0xff0000) | // move byte 1 to byte 2
                     ((data_size>>8)&0xff00) | // move byte 2 to byte 1
                     ((data_size<<24)&0xff000000); // byte 0 to byte 3
-//    std::cout << "Data size: " << data_size_swapped << std::endl;
+    std::cout << "Data size: " << data_size_swapped << std::endl;
 
     //reading encoding
     U32 enc;

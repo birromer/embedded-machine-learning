@@ -9,38 +9,45 @@
 
 
 int main() {
-  std::ifstream paths_testing_files("../data/test_paths.txt");
+  std::ifstream features_testing("../data/features_testing.csv");
+
   std::vector<std::filesystem::path> testing_files;
-  std::string temp_str;
+  std::string temp_str, header, music_type, filename;
 
-  while (std::getline(paths_testing_files, temp_str)) {
-    testing_files.push_back(temp_str);
-  }
-
-  auto all_features = compute_set_of_features(testing_files, "features_testing.csv", false);
+  std::getline(features_testing, header);
 
   int count_hits = 0;
+  int total_read = 0;
 
-  for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
-    std::string music_type = it->first.parent_path().filename();
+  while (std::getline(features_testing, temp_str)) {
     std::vector<double> feature_vector;
 
-    for (auto const &entry: it->second)
-       for (auto elem: entry.second)
-         feature_vector.push_back(elem);
+    std::stringstream ss(temp_str);
+    std::string feat_val;
+
+    for (std::size_t i=0; i<N; i++) {
+      std::getline(ss, feat_val, ',');
+      feature_vector.push_back(std::stod(feat_val));
+    }
+
+    std::getline(ss, music_type, ',');
+    std::getline(ss, filename, ',');
+
+    music_type.pop_back();
+    music_type.erase(0,2);
 
     std::string prediction = cart_predict(feature_vector);
 
-    std::cout << "music type: " << music_type << " | prediction: " << prediction << " | good? " << !prediction.compare(music_type) << std::endl;
+    std::cout << "Rad file -> " << filename << std::endl;
+    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
 
-    if (!prediction.compare(music_type)) {
+    if (!prediction.compare(music_type))
       count_hits += 1;
-    }
+
+    total_read += 1;
   }
 
-  std::cout << "hits: " << count_hits << std::endl;
-  std::cout << "total: " << all_features.size() << std::endl;
-  std::cout << "accuracy: " << (float) count_hits / (float) all_features.size() << std::endl;
+  std::cout << "accuracy: " << (float) count_hits / (float) total_read << std::endl;
 
   return 0;
 }
