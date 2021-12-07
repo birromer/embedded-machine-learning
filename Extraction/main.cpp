@@ -33,7 +33,7 @@ int main() {
 
     for (auto elem: testing_files) {
         std::cout << "Testing --> " << elem << std::endl;
-        paths_file << elem << std::endl;
+        paths_file << elem.string() << std::endl;
     }
 
     paths_file.close();
@@ -41,7 +41,7 @@ int main() {
 //    for (auto file: training_files)
 //        auto f = compute_features_for(file);
 
-    compute_set_of_features(training_files);
+    compute_set_of_features(training_files, "features_training.csv", true);
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() << " s" << std::endl;
     return 0;

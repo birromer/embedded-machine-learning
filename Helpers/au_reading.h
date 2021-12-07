@@ -72,7 +72,7 @@ DataVector readAuFile(const std::string fileName) {
                     ((data_size<<8)&0xff0000) | // move byte 1 to byte 2
                     ((data_size>>8)&0xff00) | // move byte 2 to byte 1
                     ((data_size<<24)&0xff000000); // byte 0 to byte 3
-    std::cout << "Data size: " << data_size_swapped << std::endl;
+//    std::cout << "Data size: " << data_size_swapped << std::endl;
 
     //reading encoding
     U32 enc;
@@ -82,7 +82,7 @@ DataVector readAuFile(const std::string fileName) {
                     ((enc<<8)&0xff0000) | // move byte 1 to byte 2
                     ((enc>>8)&0xff00) | // move byte 2 to byte 1
                     ((enc<<24)&0xff000000); // byte 0 to byte 3
-    std::cout <<"encodage: "<< swapped_enc<< std::endl;
+//    std::cout <<"Encodage: "<< swapped_enc<< std::endl;
 
     //reading two more header words
     myFile.seekg(sizeof(U32)*6); // zap first 3 uint32 headers
@@ -99,7 +99,6 @@ DataVector readAuFile(const std::string fileName) {
 
     myFile.close();
     fclose(fin);
-    std::cout<<"Reading data finished!!!"<< std::endl;
     return data;
 }
 

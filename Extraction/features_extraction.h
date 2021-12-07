@@ -12,6 +12,7 @@ void write_csv(std::string filename,
 
 std::map<FTYPE, DataVector> compute_features_for(std::filesystem::path &file_path);
 
-void compute_set_of_features(std::vector<std::filesystem::path> &files);
+//void compute_set_of_features(std::vector<std::filesystem::path> &files);
+std::vector<std::pair<std::filesystem::path,std::map<FTYPE, DataVector>>> compute_set_of_features(std::vector<std::filesystem::path> &files, std::string features_path, bool verbose);
 
 #endif //EML_FEATURES_EXTRACTION_H

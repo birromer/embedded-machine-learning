@@ -11,7 +11,6 @@ using namespace std::chrono;
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
-    std::cout << "size avg " << avg.size() << std::endl;
 
     int max_iter = signal.size() / N - 1;
 
@@ -43,15 +42,10 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
     }
 
     // compute scale to normalize
-    double scale_avg = abs(std::accumulate(avg.begin(), avg.end(), 0));
-    double scale_stddev = abs(std::accumulate(stddev.begin(), stddev.end(), 0));
-
     for (std::size_t i=0; i<FFT_SIZE; i++) {
         // compute the average of the magnitudes
         avg[i] /= 2*max_iter;///scale_avg;
         stddev[i] = sqrt(stddev[i]/(2*max_iter) - pow(avg[i],2));
-//        stddev[i] = sqrt(stddev[i]/(2*max_iter*pow(scale_stddev,2)) - pow(avg[i],2));
-//        stddev[i] = sqrt(stddev[i]/(2*max_iter) - pow(avg[i],2))/avg[i];
     }
 
     std::map<FTYPE, DataVector> features;
@@ -107,21 +101,28 @@ std::map<FTYPE, DataVector> compute_features_for(std::filesystem::path &file_pat
     return features;
 }
 
-void compute_set_of_features(std::vector<std::filesystem::path> &files) {
+std::vector<std::pair<std::filesystem::path,std::map<FTYPE, DataVector>>> compute_set_of_features(std::vector<std::filesystem::path> &files, std::string features_path, bool verbose) {
     std::vector<std::pair<std::filesystem::path, std::map<FTYPE, DataVector>>> all_features;
     for (auto file: files) {
-        std::cout << "Reading --> " << file.filename() << std::endl;
+        if (verbose) std::cout << "Reading --> " << file.filename() << std::endl;
+
         auto data = readAuFile(file);
-        std::cout << "finished reading au file" << std::endl;
+
+        if (verbose) std::cout << "finished reading au file" << std::endl;
+
         auto features = stft(data);
         all_features.push_back(std::make_pair(file, features));
-        std::cout << "Training parameters size --> " << features[FTYPE::BINAVG].size() << "x" << features[FTYPE::BINSTDEV].size() << std::endl;
+
+        if (verbose) std::cout << "Training parameters size --> " << features[FTYPE::BINAVG].size() << "x" << features[FTYPE::BINSTDEV].size() << std::endl;
     }
-    std::cout << "Ready to write file --> " << "features.csv" << std::endl;
-    std::cout << "Training features size --> " << all_features.size() << std::endl;
-    write_csv("features.csv", all_features);
-    std::cout << "File written !" << std::endl;
+
+    if (verbose) {
+      std::cout << "Ready to write file --> " << "features.csv" << std::endl;
+      std::cout << "Training features size --> " << all_features.size() << std::endl;
+    }
+
+    write_csv(features_path, all_features);
+    if (verbose) std::cout << "features.csv written !" << std::endl;
+
+    return all_features;
 }
-
-
-

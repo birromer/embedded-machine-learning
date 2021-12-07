@@ -126,8 +126,7 @@ class CartTree:
     def generate_prefict_cpp(self):
         cpp = open("../music_styles.cpp", "w+")
 
-        cpp.write("""
-#include <string>
+        cpp.write("""#include <string>
 #include <vector>
 
 std::string cart_predict(std::vector<double> features) {
