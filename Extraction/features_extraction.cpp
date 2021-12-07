@@ -8,8 +8,6 @@
 
 using namespace std::chrono;
 
-bool lol=true;
-
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);
     auto stddev = DataVector(FFT_SIZE);
@@ -22,6 +20,7 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         std::vector<Complex> v1(it, it+N);
         std::vector<Complex> v2(it+N/2, it+N+N/2);
 
+        // proceed with the windowing
         auto w = hamming_window();
         windowing(w, v1);
         windowing(w, v2);
@@ -32,8 +31,8 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
 
         // compute the magnitude fft's output (which is a complex, with angle and phase)
         for (std::size_t i=0; i<FFT_SIZE; i++) {
-            double abs_v1 = abs(v1[i]);
-            double abs_v2 = abs(v2[i]);
+            double abs_v1 = abs(v1[i])/(N*0.5);
+            double abs_v2 = abs(v2[i])/(N*0.5);
 
             avg[i] +=  abs_v1;
             avg[i] +=  abs_v2;
@@ -43,10 +42,16 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
         }
     }
 
+    // compute scale to normalize
+    double scale_avg = abs(std::accumulate(avg.begin(), avg.end(), 0));
+    double scale_stddev = abs(std::accumulate(stddev.begin(), stddev.end(), 0));
+
     for (std::size_t i=0; i<FFT_SIZE; i++) {
         // compute the average of the magnitudes
-        avg[i] /= max_iter*2;
-        stddev[i] = sqrt(stddev[i]/(max_iter*2) - pow(avg[i],2));
+        avg[i] /= 2*max_iter;///scale_avg;
+        stddev[i] = sqrt(stddev[i]/(2*max_iter) - pow(avg[i],2));
+//        stddev[i] = sqrt(stddev[i]/(2*max_iter*pow(scale_stddev,2)) - pow(avg[i],2));
+//        stddev[i] = sqrt(stddev[i]/(2*max_iter) - pow(avg[i],2))/avg[i];
     }
 
     std::map<FTYPE, DataVector> features;
