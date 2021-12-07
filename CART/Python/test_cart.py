@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn import tree
@@ -6,13 +8,19 @@ from sklearn.model_selection import train_test_split
 import graphviz
 from CART import *
 
-
 # Extract dataset
-dataset='../../DATASETS/croprec.csv'
+dataset = '../../data/features.csv'
 crop_df = pd.read_csv(dataset, header=0)
-Y = crop_df.label.values
-features = crop_df.columns.values[:-1]
-crop_df = crop_df.drop('label', axis=1)
+
+print(crop_df.columns.values)
+print(crop_df.Style.values)
+
+print(crop_df.head)
+
+Y = crop_df.Style.values
+features = crop_df.columns.values[:-2]
+crop_df = crop_df.drop('Style', axis=1)
+crop_df = crop_df.drop('FileName', axis=1)
 X = crop_df.values
 classes = np.unique(Y)
 
@@ -54,5 +62,3 @@ Y_pred = clf.predict(X_test)
 ConfusionMatrixDisplay.from_predictions(Y_test, Y_pred, display_labels=classes)
 plt.title("SKLEARN")
 plt.show()
-
-print(myclassifier)
