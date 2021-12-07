@@ -115,28 +115,28 @@ class CartTree:
        if self.feature == None:
            return "return ({});".format(self.label)
        else:
-           return """if (features[{}] <= {}) {{
-\t{}
-}} else {{
-\t{}
-}}\n""".format(self.feature, self.threshold, self.left.__str__(), self.right.__str__())
+           t1 = "\t"*(self.depth)
+           t2 = "\t"*(self.depth+1)
+           return """
+{}if (features[{}] <= {}) {{
+{}{}
+{}}} else {{
+{}{}
+{}}}
+           """.format(t1, self.feature, self.threshold, t2, self.left.__str__(), t1, t2, self.right.__str__(), t1)
 
     def generate_prefict_cpp(self):
-        cpp = open("prefict_cart.cpp", "w")
+        cpp = open("../music_styles.cpp", "w+")
 
         cpp.write("""
 #include <string>
 #include <vector>
 
-std::string cart_predict(std::vector<double> features) {{
+std::string cart_predict(std::vector<double> features) {
 """)
 
         cpp.write(self.__str__())
 
-        cpp.write("\n}}")
+        cpp.write("\n}")
 
         cpp.close()
-
-
-#TODO GENERATE C++ CODE TO TAKE THE DECISION !
-#TODO TO GENERATE, OVERLOAD __str__ in this class and use a prefix walk of the tree.

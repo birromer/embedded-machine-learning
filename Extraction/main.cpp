@@ -3,6 +3,7 @@
 #include <tuple>
 #include "../Helpers/file_helpers.h"
 #include "features_extraction.h"
+#include <fstream>
 
 
 int main() {
@@ -17,7 +18,7 @@ int main() {
         auto files = alpha_files_listing(dir_path);
         std::vector<std::filesystem::path> training;
         std::vector<std::filesystem::path> testing;
-        std::tie(training, testing) = select_train_test_files(files, 0.0);
+        std::tie(training, testing) = select_train_test_files(files, 0.3);
         training_files.insert(training_files.end(), training.begin(), training.end());
         testing_files.insert(testing_files.end(), testing.begin(), testing.end());
     }
@@ -27,8 +28,16 @@ int main() {
 
 //    for (auto elem: training_files)
 //        std::cout << "Training --> " << elem << std::endl;
-//    for (auto elem: testing_files)
-//        std::cout << "Testing --> " << elem << std::endl;
+
+    std::ofstream paths_file("../data/test_paths.txt");
+
+    for (auto elem: testing_files) {
+        std::cout << "Testing --> " << elem << std::endl;
+        paths_file << elem << std::endl;
+    }
+
+    paths_file.close();
+
 //    for (auto file: training_files)
 //        auto f = compute_features_for(file);
 
