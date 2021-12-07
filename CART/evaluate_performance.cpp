@@ -6,18 +6,16 @@
 #include "../Helpers/globals.h"
 #include "predict_cart.cpp"
 
-using namespace std;
-
 int main() {
+
+  std::ifstream paths_file("../data/test_paths.txt");
+
+
 
 
   for (auto file: files) {
-    std::cout << "Reading --> " << file.filename() << std::endl;
-    auto data = readAuFile(file);
-    std::cout << "finished reading au file" << std::endl;
-    auto features = stft(data);
-    all_features.push_back(std::make_pair(file, features));
-    std::cout << "Training parameters size --> " << features[FTYPE::BINAVG].size() << "x" << features[FTYPE::BINSTDEV].size() << std::endl;
+    std::cout << "feading --> " << file.filename() << std::endl;
+    auto data = read_csv(file);
   }
 
   return 0;

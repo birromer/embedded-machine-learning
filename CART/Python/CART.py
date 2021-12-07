@@ -115,15 +115,13 @@ class CartTree:
        if self.feature == None:
            return "return ({});".format(self.label)
        else:
-           t1 = "\t"*(self.depth)
-           t2 = "\t"*(self.depth+1)
-           return """
-{}if (features[{}] <= {}) {{
+           t1 = "\t"*(self.depth+1)
+           t2 = "\t"*(self.depth+2)
+           return """{}if (features[{}] <= {}) {{
 {}{}
 {}}} else {{
 {}{}
-{}}}
-           """.format(t1, self.feature, self.threshold, t2, self.left.__str__(), t1, t2, self.right.__str__(), t1)
+{}}}""".format(t1, self.feature, self.threshold, t2, self.left.__str__(), t1, t2, self.right.__str__(), t1)
 
     def generate_prefict_cpp(self):
         cpp = open("../music_styles.cpp", "w+")
