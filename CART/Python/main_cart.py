@@ -12,7 +12,7 @@ from CART import *
 dataset = '../../data/features_training.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
-print(crop_df.head)
+print("Head training:\n", crop_df.head)
 
 Y_train = crop_df.Style.values
 features = crop_df.columns.values[:-2]
@@ -28,7 +28,7 @@ print(classes.shape)
 dataset = '../../data/features_testing.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
-print(crop_df.head)
+print("Head testing:\n", crop_df.head)
 
 Y_test = crop_df.Style.values
 features = crop_df.columns.values[:-2]
@@ -38,7 +38,7 @@ X_test = crop_df.values
 
 ## TRAIN/TEST SPLIT
 ##
-#X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+#X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, test_size=0.33, random_state=42)
 #print("Splitting test, train", X_train.shape, X_test.shape)
 
 # My CART_TREES TREE
