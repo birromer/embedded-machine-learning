@@ -8,25 +8,38 @@ from sklearn.model_selection import train_test_split
 import graphviz
 from CART import *
 
-# Extract dataset
+# Extract dataset training
 dataset = '../../data/features_training.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
 print(crop_df.head)
 
-Y = crop_df.Style.values
+Y_train = crop_df.Style.values
 features = crop_df.columns.values[:-2]
 crop_df = crop_df.drop('Style', axis=1)
 crop_df = crop_df.drop('FileName', axis=1)
-X = crop_df.values
-classes = np.unique(Y)
+X_train = crop_df.values
+classes = np.unique(Y_train)
 
 print(features, classes)
 print(classes.shape)
 
-# TRAIN/TEST SPLIT
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-print("Splitting test, train", X_train.shape, X_test.shape)
+# Extract dataset testing
+dataset = '../../data/features_testing.csv'
+crop_df = pd.read_csv(dataset, header=0)
+
+print(crop_df.head)
+
+Y_test = crop_df.Style.values
+features = crop_df.columns.values[:-2]
+crop_df = crop_df.drop('Style', axis=1)
+crop_df = crop_df.drop('FileName', axis=1)
+X_test = crop_df.values
+
+## TRAIN/TEST SPLIT
+##
+#X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+#print("Splitting test, train", X_train.shape, X_test.shape)
 
 # My CART_TREES TREE
 print("Training !")
