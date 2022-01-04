@@ -2,404 +2,320 @@
 #include <vector>
 
 std::string cart_predict(std::vector<double> features) {
-	if (features[375] <= 7.9915) {
-		if (features[258] <= 359.14549999999997) {
-			return ( "classical");
+	if (features[376] <= 8.575344999999999) {
+		if (features[3] <= 428.4355) {
+			if (features[273] <= 11.1051) {
+				return ( "jazz");
+			} else {
+				if (features[444] <= 5.26204) {
+					return ( "classical");
+				} else {
+					if (features[0] <= 63.03045) {
+						return ( "jazz");
+					} else {
+						return ( "classical");
+					}
+				}
+			}
 		} else {
-			if (features[0] <= 37.4563) {
+			if (features[0] <= 81.56495) {
 				return ( "country");
 			} else {
-				return ( "jazz");
+				return ( "blues");
 			}
 		}
 	} else {
-		if (features[486] <= 1.8685200000000002) {
-			if (features[477] <= 3.234495) {
-				if (features[262] <= 295.027) {
-					if (features[157] <= 6.63488) {
-						return ( "country");
-					} else {
-						if (features[1] <= 231.959) {
-							return ( "classical");
-						} else {
-							if (features[3] <= 462.2635) {
-								return ( "jazz");
-							} else {
-								if (features[0] <= 126.60740000000001) {
+		if (features[488] <= 2.572305) {
+			if (features[262] <= 519.9395) {
+				if (features[10] <= 433.46000000000004) {
+					if (features[47] <= 117.10900000000001) {
+						if (features[410] <= 25.874200000000002) {
+							if (features[9] <= 252.22050000000002) {
+								if (features[55] <= 33.5189) {
 									return ( "blues");
 								} else {
-									return ( "metal");
+									if (features[0] <= 53.5059) {
+										return ( "classical");
+									} else {
+										return ( "jazz");
+									}
 								}
-							}
-						}
-					}
-				} else {
-					if (features[34] <= 110.9185) {
-						if (features[279] <= 53.94135) {
-							if (features[0] <= 243.9635) {
-								return ( "country");
 							} else {
-								return ( "blues");
+								return ( "country");
 							}
 						} else {
 							return ( "blues");
 						}
 					} else {
-						if (features[118] <= 28.4026) {
-							if (features[5] <= 1054.15) {
-								if (features[286] <= 215.091) {
-									if (features[0] <= 107.37565000000001) {
-										return ( "classical");
-									} else {
-										return ( "metal");
-									}
-								} else {
-									return ( "country");
-								}
-							} else {
-								return ( "blues");
-							}
+						if (features[0] <= 251.2855) {
+							return ( "metal");
 						} else {
-							if (features[7] <= 381.2045) {
-								return ( "hiphop");
-							} else {
-								return ( "blues");
-							}
+							return ( "hiphop");
 						}
+					}
+				} else {
+					if (features[44] <= 161.015) {
+						return ( "country");
+					} else {
+						return ( "blues");
 					}
 				}
 			} else {
-				if (features[105] <= 64.44655) {
-					if (features[274] <= 196.2295) {
-						if (features[0] <= 262.234) {
-							return ( "blues");
+				if (features[463] <= 13.3923) {
+					if (features[9] <= 920.6475) {
+						if (features[119] <= 5.87714) {
+							return ( "country");
 						} else {
-							return ( "hiphop");
+							return ( "blues");
 						}
 					} else {
 						return ( "country");
 					}
 				} else {
-					if (features[6] <= 609.499) {
-						if (features[0] <= 214.4955) {
-							return ( "metal");
-						} else {
-							if (features[0] <= 369.96750000000003) {
-								return ( "country");
-							} else {
-								return ( "hiphop");
-							}
-						}
-					} else {
-						if (features[8] <= 467.1435) {
+					if (features[259] <= 1063.71) {
+						if (features[3] <= 875.0840000000001) {
 							return ( "hiphop");
 						} else {
+							return ( "country");
+						}
+					} else {
+						if (features[0] <= 479.47450000000003) {
 							return ( "blues");
+						} else {
+							return ( "hiphop");
 						}
 					}
 				}
 			}
 		} else {
-			if (features[46] <= 303.562) {
-				if (features[257] <= 1266.475) {
-					if (features[192] <= 16.4554) {
-						if (features[310] <= 122.681) {
-							if (features[249] <= 4.384755) {
-								return ( "jazz");
-							} else {
-								if (features[10] <= 191.0305) {
-									return ( "hiphop");
-								} else {
-									return ( "classical");
-								}
-							}
-						} else {
+			if (features[23] <= 223.77800000000002) {
+				if (features[344] <= 62.96254999999999) {
+					if (features[14] <= 330.1325) {
+						if (features[70] <= 39.733599999999996) {
 							return ( "classical");
+						} else {
+							if (features[21] <= 160.909) {
+								return ( "hiphop");
+							} else {
+								return ( "disco");
+							}
 						}
 					} else {
-						if (features[59] <= 233.9325) {
-							if (features[24] <= 172.2535) {
-								if (features[111] <= 35.1075) {
-									if (features[0] <= 375.0225) {
-										return ( "country");
-									} else {
-										return ( "disco");
-									}
-								} else {
-									if (features[0] <= 163.59699999999998) {
-										return ( "disco");
-									} else {
-										return ( "hiphop");
-									}
-								}
+						return ( "jazz");
+					}
+				} else {
+					if (features[0] <= 164.5275) {
+						if (features[0] <= 136.07150000000001) {
+							return ( "disco");
+						} else {
+							return ( "country");
+						}
+					} else {
+						if (features[15] <= 460.6845) {
+							if (features[48] <= 262.921) {
+								return ( "hiphop");
 							} else {
-								if (features[272] <= 576.953) {
-									if (features[0] <= 674.6535) {
-										if (features[8] <= 235.15699999999998) {
-											return ( "hiphop");
-										} else {
-											return ( "disco");
-										}
-									} else {
-										return ( "blues");
-									}
-								} else {
-									if (features[0] <= 523.1355) {
-										return ( "jazz");
-									} else {
-										return ( "blues");
-									}
-								}
+								return ( "disco");
 							}
 						} else {
 							return ( "country");
 						}
 					}
-				} else {
-					if (features[306] <= 75.08445) {
-						return ( "jazz");
-					} else {
-						if (features[159] <= 97.5076) {
-							if (features[276] <= 690.3045) {
-								if (features[353] <= 170.45749999999998) {
-									return ( "hiphop");
-								} else {
-									return ( "disco");
-								}
-							} else {
-								return ( "disco");
-							}
-						} else {
-							return ( "disco");
-						}
-					}
 				}
 			} else {
-				if (features[279] <= 502.1735) {
-					if (features[407] <= 469.557) {
-						if (features[4] <= 1353.145) {
-							if (features[297] <= 489.192) {
-								return ( "country");
-							} else {
-								if (features[0] <= 482.7555) {
-									return ( "classical");
+				if (features[13] <= 455.5215) {
+					if (features[2] <= 2097.54) {
+						return ( "disco");
+					} else {
+						if (features[0] <= 771.2774999999999) {
+							if (features[1] <= 1816.1399999999999) {
+								if (features[0] <= 145.78699999999998) {
+									return ( "disco");
 								} else {
-									return ( "reggae");
+									if (features[0] <= 379.8315) {
+										return ( "jazz");
+									} else {
+										return ( "rock");
+									}
 								}
+							} else {
+								return ( "country");
 							}
 						} else {
-							return ( "rock");
+							return ( "hiphop");
 						}
-					} else {
-						if (features[405] <= 499.17100000000005) {
-							if (features[288] <= 486.72) {
-								if (features[108] <= 943.182) {
-									if (features[62] <= 923.0654999999999) {
-										if (features[394] <= 489.423) {
-											if (features[433] <= 481.087) {
-												if (features[1] <= 930.1795) {
-													return ( "metal");
-												} else {
-													return ( "country");
-												}
-											} else {
-												if (features[5] <= 910.895) {
-													return ( "disco");
-												} else {
-													return ( "pop");
-												}
-											}
-										} else {
-											if (features[2] <= 935.774) {
-												return ( "country");
-											} else {
-												if (features[0] <= 834.0935) {
-													return ( "reggae");
-												} else {
-													return ( "jazz");
-												}
-											}
-										}
-									} else {
-										if (features[429] <= 475.495) {
-											if (features[100] <= 931.827) {
-												if (features[0] <= 835.7395) {
-													return ( "jazz");
-												} else {
-													return ( "disco");
-												}
-											} else {
-												return ( "pop");
-											}
-										} else {
-											if (features[190] <= 929.5185) {
-												if (features[437] <= 477.02) {
-													return ( "reggae");
-												} else {
-													return ( "pop");
-												}
-											} else {
-												if (features[283] <= 486.56899999999996) {
-													return ( "metal");
-												} else {
-													return ( "metal");
-												}
-											}
-										}
-									}
-								} else {
-									if (features[59] <= 942.181) {
-										if (features[2] <= 954.69) {
-											return ( "pop");
-										} else {
-											return ( "disco");
-										}
-									} else {
-										if (features[0] <= 848.3085) {
-											if (features[0] <= 832.4300000000001) {
-												return ( "metal");
-											} else {
-												if (features[0] <= 841.082) {
-													return ( "disco");
-												} else {
-													return ( "reggae");
-												}
-											}
-										} else {
-											return ( "hiphop");
-										}
-									}
-								}
+					}
+				} else {
+					if (features[289] <= 498.1305) {
+						if (features[80] <= 83.0122) {
+							return ( "classical");
+						} else {
+							if (features[281] <= 263.54499999999996) {
+								return ( "country");
 							} else {
-								if (features[53] <= 950.9685) {
-									if (features[164] <= 940.677) {
-										if (features[329] <= 482.34450000000004) {
-											if (features[473] <= 493.865) {
-												if (features[262] <= 480.30949999999996) {
-													return ( "pop");
-												} else {
-													return ( "disco");
-												}
-											} else {
-												return ( "metal");
-											}
-										} else {
-											if (features[414] <= 481.51099999999997) {
-												if (features[349] <= 495.75149999999996) {
-													return ( "jazz");
-												} else {
-													return ( "disco");
-												}
-											} else {
-												if (features[340] <= 493.911) {
-													return ( "metal");
-												} else {
-													return ( "reggae");
-												}
-											}
-										}
-									} else {
-										if (features[254] <= 940.0015) {
-											if (features[101] <= 940.1755) {
-												if (features[221] <= 941.448) {
-													return ( "rock");
-												} else {
-													return ( "metal");
-												}
-											} else {
-												if (features[0] <= 848.3015) {
-													return ( "disco");
-												} else {
-													return ( "pop");
-												}
-											}
-										} else {
-											if (features[70] <= 941.28) {
-												if (features[2] <= 924.156) {
-													return ( "reggae");
-												} else {
-													return ( "metal");
-												}
-											} else {
-												return ( "jazz");
-											}
-										}
-									}
-								} else {
-									if (features[334] <= 495.659) {
-										if (features[276] <= 480.5365) {
-											if (features[0] <= 834.3330000000001) {
-												return ( "disco");
-											} else {
-												if (features[0] <= 838.9955) {
-													return ( "reggae");
-												} else {
+								if (features[274] <= 488.5425) {
+									if (features[192] <= 916.0515) {
+										if (features[264] <= 491.57849999999996) {
+											if (features[5] <= 927.489) {
+												if (features[0] <= 597.0675) {
 													return ( "hiphop");
+												} else {
+													return ( "reggae");
 												}
+											} else {
+												return ( "rock");
 											}
 										} else {
-											if (features[11] <= 948.2565) {
+											if (features[1] <= 926.2745) {
 												return ( "rock");
 											} else {
 												return ( "jazz");
 											}
 										}
 									} else {
-										return ( "pop");
+										if (features[288] <= 476.173) {
+											if (features[5] <= 922.925) {
+												return ( "pop");
+											} else {
+												return ( "metal");
+											}
+										} else {
+											if (features[404] <= 483.1745) {
+												if (features[43] <= 924.0685000000001) {
+													return ( "metal");
+												} else {
+													return ( "pop");
+												}
+											} else {
+												if (features[397] <= 477.3095) {
+													return ( "disco");
+												} else {
+													return ( "metal");
+												}
+											}
+										}
+									}
+								} else {
+									if (features[250] <= 931.896) {
+										if (features[233] <= 918.8455) {
+											if (features[3] <= 956.878) {
+												if (features[65] <= 932.013) {
+													return ( "hiphop");
+												} else {
+													return ( "jazz");
+												}
+											} else {
+												if (features[60] <= 949.001) {
+													return ( "disco");
+												} else {
+													return ( "metal");
+												}
+											}
+										} else {
+											if (features[278] <= 484.5565) {
+												if (features[240] <= 933.598) {
+													return ( "pop");
+												} else {
+													return ( "disco");
+												}
+											} else {
+												if (features[425] <= 488.1615) {
+													return ( "reggae");
+												} else {
+													return ( "rock");
+												}
+											}
+										}
+									} else {
+										if (features[173] <= 937.277) {
+											if (features[284] <= 491.6205) {
+												if (features[107] <= 942.9155000000001) {
+													return ( "pop");
+												} else {
+													return ( "disco");
+												}
+											} else {
+												if (features[7] <= 929.72) {
+													return ( "jazz");
+												} else {
+													return ( "country");
+												}
+											}
+										} else {
+											if (features[383] <= 489.275) {
+												if (features[308] <= 491.95550000000003) {
+													return ( "metal");
+												} else {
+													return ( "country");
+												}
+											} else {
+												if (features[57] <= 930.7895000000001) {
+													return ( "rock");
+												} else {
+													return ( "disco");
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					} else {
+						if (features[76] <= 959.0685) {
+							if (features[40] <= 937.6034999999999) {
+								if (features[85] <= 931.5875) {
+									return ( "hiphop");
+								} else {
+									if (features[17] <= 935.913) {
+										if (features[14] <= 934.816) {
+											return ( "jazz");
+										} else {
+											if (features[0] <= 839.018) {
+												return ( "metal");
+											} else {
+												return ( "reggae");
+											}
+										}
+									} else {
+										return ( "rock");
+									}
+								}
+							} else {
+								if (features[84] <= 934.777) {
+									if (features[434] <= 481.5375) {
+										return ( "jazz");
+									} else {
+										if (features[45] <= 942.7635) {
+											if (features[54] <= 945.127) {
+												return ( "reggae");
+											} else {
+												return ( "disco");
+											}
+										} else {
+											if (features[27] <= 959.288) {
+												if (features[0] <= 1002.608) {
+													return ( "country");
+												} else {
+													return ( "pop");
+												}
+											} else {
+												return ( "rock");
+											}
+										}
+									}
+								} else {
+									if (features[389] <= 496.5935) {
+										return ( "reggae");
+									} else {
+										return ( "jazz");
 									}
 								}
 							}
 						} else {
-							if (features[95] <= 940.7715000000001) {
+							if (features[65] <= 943.3489999999999) {
 								return ( "rock");
-							} else {
-								if (features[0] <= 859.3455) {
-									return ( "metal");
-								} else {
-									return ( "disco");
-								}
-							}
-						}
-					}
-				} else {
-					if (features[6] <= 1012.14) {
-						if (features[116] <= 939.831) {
-							if (features[260] <= 594.038) {
-								if (features[113] <= 943.5) {
-									return ( "reggae");
-								} else {
-									return ( "country");
-								}
-							} else {
-								if (features[0] <= 888.3415) {
-									return ( "jazz");
-								} else {
-									return ( "hiphop");
-								}
-							}
-						} else {
-							if (features[12] <= 952.427) {
-								if (features[0] <= 891.767) {
-									return ( "pop");
-								} else {
-									return ( "hiphop");
-								}
 							} else {
 								return ( "jazz");
-							}
-						}
-					} else {
-						if (features[481] <= 481.78200000000004) {
-							return ( "jazz");
-						} else {
-							if (features[10] <= 1027.195) {
-								return ( "rock");
-							} else {
-								if (features[0] <= 955.01) {
-									return ( "reggae");
-								} else {
-									return ( "country");
-								}
 							}
 						}
 					}

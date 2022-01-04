@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn.svm import LinearSVC
+from sklearn.svm import SVC
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -46,8 +47,10 @@ if __name__ == "__main__":
     # reduce the dimension and train
     svm_clf = Pipeline([
         ("scaler", StandardScaler()),
-        ("linear_svc", LinearSVC(C=1.0, loss="hinge", verbose=0, max_iter=2000)),
+#        ("linear_svc", LinearSVC(C=1.0, loss="hinge", class_weight='balanced', verbose=0, max_iter=2000)),
+         ("linear_svc", SVC(kernel='linear', class_weight='balanced', gamma=0.0001, C=1, decision_function_shape='ovo')),
     ])
+
 
     svm_clf.fit(X_train, y_train)
     print("Fit SVM model with train data.")
@@ -58,6 +61,7 @@ if __name__ == "__main__":
     print("shape X test:", X_test.shape)
     print("shape y test:", y_test.shape)
 
+#    predictions = svm_clf.predict(svm_clf['scaler'].transform(X_test))
     predictions = svm_clf.predict(X_test)
 
     print("Confurion matrix:\n", confusion_matrix(y_test, predictions, labels=classes))
