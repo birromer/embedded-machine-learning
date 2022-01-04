@@ -35,12 +35,12 @@ def load_data(filename):
 
 if __name__ == "__main__":
     # load data
-#    X_train, y_train, _ = load_data(FEAT_TRAIN_FILE)
-#    X_test, y_test, classes = load_data(FEAT_TEST_FILE)
+    X_train, y_train, _ = load_data(FEAT_TRAIN_FILE)
+    X_test, y_test, classes = load_data(FEAT_TEST_FILE)
 
-    X, Y, classes = load_data(ALL_DATA_FILE)
-    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-    print("Splitting test, train", X_train.shape, X_test.shape)
+#    X, Y, classes = load_data(ALL_DATA_FILE)
+#    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+#    print("Splitting test, train", X_train.shape, X_test.shape)
 
     print("Loaded training and testing data.")
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     print("mean shape", mean.shape)
     print("var shape", var.shape)
 
-    np.savetxt('svm_feat_stats.csv', np.concatenate((mean,var), axis=0).T, header=','.join(header), delimiter=',', comments='')
+    np.savetxt(os.path.join(DATA_DIR, 'svm_feat_stats.csv'), np.concatenate((mean,var), axis=0).T, header=','.join(header), delimiter=',', comments='')
 
     coef = svm_clf['linear_svc'].coef_  # feature weights in the learnt model
     bias = svm_clf['linear_svc'].intercept_  # bias in the decision function
@@ -95,4 +95,4 @@ if __name__ == "__main__":
 
     header = ['COEF{}'.format(i) for i in range(coef.shape[1]+1)]+['BIAS']
 
-    np.savetxt('svm_coeff.csv', np.concatenate((coef,bias), axis=1), header=','.join(header), delimiter=',', comments='')
+    np.savetxt(os.path.join(DATA_DIR, 'svm_coeff.csv'), np.concatenate((coef,bias), axis=1), header=','.join(header), delimiter=',', comments='')

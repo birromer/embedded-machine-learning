@@ -14,13 +14,16 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
 
     int max_iter = signal.size() / N - 1;
 
+    auto w = hamming_window();
+    auto wenergy = std::reduce(w.cbegin(), w.cend(), 0.0, std::plus<real>());
+    auto scale = 1 / (wenergy);
+
     for (DataVector::const_iterator it = signal.begin(); it != signal.begin() + max_iter*N; it+=N) {
         // get the two overlapping chuncks from the sliding window
         std::vector<Complex> v1(it, it+N);
         std::vector<Complex> v2(it+N/2, it+N+N/2);
 
         // proceed with the windowing
-        auto w = hamming_window();
         windowing(w, v1);
         windowing(w, v2);
 
@@ -30,8 +33,8 @@ std::map<FTYPE, DataVector> stft(DataVector &signal) {
 
         // compute the magnitude fft's output (which is a complex, with angle and phase)
         for (std::size_t i=0; i<FFT_SIZE; i++) {
-            double abs_v1 = abs(v1[i])/(N*0.5);
-            double abs_v2 = abs(v2[i])/(N*0.5);
+            double abs_v1 = abs(v1[i])*scale;///(N*0.5);
+            double abs_v2 = abs(v2[i])*scale;///(N*0.5);
 
             avg[i] +=  abs_v1;
             avg[i] +=  abs_v2;
