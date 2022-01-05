@@ -12,16 +12,4 @@ constexpr std::size_t OVO_CLASS_N = CLASS_N * (CLASS_N - 1) / 2; // One Versus O
 constexpr std::size_t MEL_N = 26;
 constexpr std::size_t MEL_FILTERS_N = MEL_N - 2;
 
-
-//#define "blues" 1
-//#define "classical" 2
-//#define "country" 3
-//#define "disco" 4
-//#define "hiphop" 5
-//#define "jazz" 6
-//#define "metal" 7
-//#define "pop" 8
-//#define "reggae" 9
-//#define "rock" 10
-
 #endif //GLOBAL_H
