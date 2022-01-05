@@ -123,12 +123,16 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // index 0 stores the values for the last class
   std::vector<int> duels_score( N_CLASSES, 0);
 
-
   int i = 0;
   for (int p1 = 0; p1 < N_CLASSES; p1++) {
     for (int p2 = p1+1; p2 < N_CLASSES; p2++) {
-      duels_score[p1] += Y[i];
-      duels_score[p2] -= Y[i];
+
+//      duels_score[p1] += Y[i];
+//      duels_score[p2] -= Y[i];
+      if (Y[i] >= 0)
+        duels_score[p1]++;
+      else
+        duels_score[p2]++;
       i++;
     }
   }
