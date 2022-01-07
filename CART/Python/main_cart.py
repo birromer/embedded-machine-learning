@@ -10,6 +10,7 @@ from CART import *
 
 # Extract dataset training
 dataset = '../../data/features_training.csv'
+#dataset = '../../data/features_prof.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
 print("Head training:\n", crop_df.head)
@@ -22,7 +23,7 @@ X_train = crop_df.values
 classes = np.unique(Y_train)
 
 print(features, classes)
-print(classes.shape)
+print("Nb classes:", classes.shape)
 
 # Extract dataset testing
 dataset = '../../data/features_testing.csv'
@@ -36,8 +37,7 @@ crop_df = crop_df.drop('Style', axis=1)
 crop_df = crop_df.drop('FileName', axis=1)
 X_test = crop_df.values
 
-## TRAIN/TEST SPLIT
-##
+# TRAIN/TEST SPLIT
 #X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, test_size=0.33, random_state=42)
 #print("Splitting test, train", X_train.shape, X_test.shape)
 
