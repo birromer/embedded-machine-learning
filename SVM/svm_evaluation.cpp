@@ -66,7 +66,7 @@ int main() {
     total_read += 1;
   }
 
-  std::cout << "accuracy: " << (float) count_hits / (float) total_read << std::endl;
+  std::cout << "Accuracy: " << (float) count_hits / (float) total_read << std::endl;
 
   return 0;
 }
@@ -118,6 +118,7 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // we'll have a 45x1 vector (10x9/2 classes) with all duels on
   // the 1v1 classifier, must choose the one that wins the most
   // they are in the order 0v1, 0v2, 0v3, ..., NvN-1
+  // TODO: Confirm the order of comparissons
 
   // counter of duels won by each class
   // index 0 stores the values for the last class
@@ -126,13 +127,8 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   int i = 0;
   for (int p1 = 0; p1 < N_CLASSES; p1++) {
     for (int p2 = p1+1; p2 < N_CLASSES; p2++) {
-
-//      duels_score[p1] += Y[i];
-//      duels_score[p2] -= Y[i];
-      if (Y[i] >= 0)
-        duels_score[p1]++;
-      else
-        duels_score[p2]++;
+      duels_score[p1] += Y[i];
+      duels_score[p2] -= Y[i];
       i++;
     }
   }

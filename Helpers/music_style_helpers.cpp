@@ -78,7 +78,7 @@ MUSIC_STYLE music_style_from_int(unsigned int s) {
         case 9:
             return MUSIC_STYLE::ROCK;
         default:
-            throw std::logic_error("to_int: MUSIC_STYLE enum values not found.");
+            throw std::logic_error("from_int: MUSIC_STYLE enum values not found.");
     }
 }
 

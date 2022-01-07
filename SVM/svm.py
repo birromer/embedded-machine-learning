@@ -35,12 +35,12 @@ def load_data(filename):
 
 if __name__ == "__main__":
     # load data
-    X_train, y_train, _ = load_data(FEAT_TRAIN_FILE)
-    X_test, y_test, classes = load_data(FEAT_TEST_FILE)
+#    X_train, y_train, _ = load_data(FEAT_TRAIN_FILE)
+#    X_test, y_test, classes = load_data(FEAT_TEST_FILE)
 
-#    X, Y, classes = load_data(ALL_DATA_FILE)
-#    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
-#    print("Splitting test, train", X_train.shape, X_test.shape)
+    X, Y, classes = load_data(ALL_DATA_FILE)
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+    print("Splitting test, train", X_train.shape, X_test.shape)
 
     print("Loaded training and testing data.")
 
