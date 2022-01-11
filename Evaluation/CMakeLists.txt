@@ -1,7 +1,12 @@
+cmake_minimum_required(VERSION 3.16)
+project(EVALUATION)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O3  -Wall -Wextra -ggdb -std=c++20")
+
 add_executable(EVALUATION_CART
   ../Extraction/features_extraction.cpp
   ../Helpers/music_style_helpers.cpp
-  ../CART/music_styles_cart.cpp
   evaluation_cart.cpp)
 
 #add_executable(EVALUATION_RF
@@ -13,7 +18,6 @@ add_executable(EVALUATION_CART
 add_executable(EVALUATION_SVM
   ../Extraction/features_extraction.cpp
   ../Helpers/music_style_helpers.cpp
-  ../SVM/music_styles_svm.cpp
   evaluation_svm.cpp)
 
 #add_executable(EVALUATION_ANN

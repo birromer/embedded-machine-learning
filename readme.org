@@ -82,6 +82,8 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 
 - =Evaluation/= :: Contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
 
+=setup.sh= and =evaluation.sh= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
+
 ** Requirements
 
 ** Usage
@@ -89,9 +91,9 @@ The first step is to compile the source code, which can be done with the followi
 
 #+begin_src bash :tangle "setup.sh" :exports code :results silent :mkdirp yes
 # build feature extraction
-mkdir -p build
-cmake -S Extraction -B build  # "Extraction" may be replaced by the desired module or . for the entire project
-make -C build
+mkdir -p build/setup
+cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module or . for the entire project
+make -C build/setup
 #+end_src
 
 Only the needed module is compiled now, as some files needed for further building the modules are generated in the following steps. An example is CART, which will only have its prediction tree after the training done in Python.
@@ -107,7 +109,7 @@ Having the project built, the extraction can be executed with the following comm
 
 #+begin_src bash :tangle "setup.sh" :exports code :results silent
 # extract features
-./build/EXTRACTION
+./build/setup/EXTRACTION
 #+end_src
 
 *** CART
@@ -137,22 +139,27 @@ The usage of the ANN method requires first the training of the associated neural
 python3 ANN/train_ann.py
 #+end_src
 
+<COMPLETE WITH OUTPUT WEIGHTS FILE>
+
 
 * Results
 The results are again separated by method, being the related code executable from compiling the Evaluation folder.
 
-#+begin_src bash :tangle "evaluation.sh" :export code :results silent
+#+begin_src bash :tangle "eval.sh" :export code :results silent
 # build evaluation code
-cmake -S Evaluation -B build
-make -C build
+mkdir -p build/eval
+cmake -S Evaluation -B build/eval
+make -C build/eval
 #+end_src
 
 ** CART
 The accuracy and confusion matrix from CART can be found with the following command:
-#+begin_src bash :tangle "evaluation.sh" :export both
+#+begin_src bash :tangle "eval.sh" :export both
 # execute cart evaluation
-./build/EVALUATION_CART
+./build/eval/EVALUATION_CART
 #+end_src
+
+#+RESULTS:
 
 ** SVM
 

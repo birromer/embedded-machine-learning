@@ -4,6 +4,8 @@
 #include <map>
 #include <filesystem>
 #include "../Helpers/etypes.h"
+#include <numeric>
+#include <fstream>
 
 std::map<FTYPE, DataVector> stft(DataVector &signal);
 

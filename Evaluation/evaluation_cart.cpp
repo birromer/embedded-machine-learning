@@ -5,13 +5,12 @@
 #include <filesystem>
 #include "../Helpers/globals.h"
 #include "../Extraction/features_extraction.h"
-#include "../Helpers/au_reading.h"
-#include "music_styles.cpp"
+#include "../CART/music_styles_cart.h"
 
 
 int main() {
-  std::ifstream features_testing("../DATA/features_testing.csv");
-//  std::ifstream features_testing("../DATA/features_prof.csv");
+  std::ifstream features_testing("./DATA/features_testing.csv");
+//  std::ifstream features_testing("./DATA/features_prof.csv");
 
   std::vector<std::filesystem::path> testing_files;
   std::string temp_str, header, music_type, filename;

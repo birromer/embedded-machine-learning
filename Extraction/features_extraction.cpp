@@ -1,12 +1,8 @@
-#include <numeric>
-#include <fstream>
 #include "features_extraction.h"
 #include "../Helpers/globals.h"
 #include "../Helpers/signal.h"
 #include "../Helpers/au_reading.h"
-#include <chrono>
 
-using namespace std::chrono;
 
 std::map<FTYPE, DataVector> stft(DataVector &signal) {
     auto avg = DataVector(FFT_SIZE);

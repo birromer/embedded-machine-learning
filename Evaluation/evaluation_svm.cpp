@@ -8,7 +8,6 @@
 #include "../Helpers/globals.h"
 #include "../Helpers/music_style_helpers.h"
 #include "../Extraction/features_extraction.h"
-#include "../Helpers/au_reading.h"
 
 // Learned SVM coefficients
 const std::string path_svm_coeff = "../DATA/svm_coeff.csv";

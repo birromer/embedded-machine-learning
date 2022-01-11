@@ -60,7 +60,7 @@ dot_data = tree.export_graphviz(clf,
                                 rounded=True,
                                 special_characters=True)
 graph = graphviz.Source(dot_data)
-graph.render("Crop recommandations")
+graph.render("./CART/Crop recommandations")
 
 # PREDICTIONS
 Y_pred = myclassifier.predict(X_test)

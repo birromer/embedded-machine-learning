@@ -1,10 +1,10 @@
 # build feature extraction
-mkdir -p build
-cmake -S Extraction -B build  # "Extraction" may be replaced by the desired module or . for the entire project
-make -C build
+mkdir -p build/setup
+cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module or . for the entire project
+make -C build/setup
 
 # extract features
-./build/EXTRACTION
+./build/setup/EXTRACTION
 
 # train cart tree
 python3 CART/train_cart.py

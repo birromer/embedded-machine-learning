@@ -11,9 +11,8 @@ input_shape = (512, 1)
 nb_classes = 10
 nb_epochs = 100
 
-DATA_DIR = "../../DATA"
+DATA_DIR = "./DATA"
 FEAT_TRAIN_FILE = "features_training.csv"
-ALL_DATA_FILE = "features_prof.csv"
 
 def load_data(filename):
     data_path = os.path.join(DATA_DIR, filename)

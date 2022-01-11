@@ -61,9 +61,9 @@ DataVector readAuFile(const std::string fileName) {
         throw std::runtime_error("Wrong magic number.");
 
     //reading offset
-    U32  offset, offset_swapped;
+    U32  offset;
     myFile.read(reinterpret_cast<char *>(&offset), sizeof(U32));
-    offset_swapped = ((offset>>24)&0xff) | // move byte 3 to byte 0
+    U32 offset_swapped = ((offset>>24)&0xff) | // move byte 3 to byte 0
                     ((offset<<8)&0xff0000) | // move byte 1 to byte 2
                     ((offset>>8)&0xff00) | // move byte 2 to byte 1
                     ((offset<<24)&0xff000000); // byte 0 to byte 3
@@ -72,9 +72,8 @@ DataVector readAuFile(const std::string fileName) {
 
     //reading data_size
     U32 data_size;
-    U32 data_size_swapped;
     myFile.read(reinterpret_cast<char *>(&data_size), sizeof(U32));
-    data_size_swapped = ((data_size>>24)&0xff) | // move byte 3 to byte 0
+    U32 data_size_swapped = ((data_size>>24)&0xff) | // move byte 3 to byte 0
                     ((data_size<<8)&0xff0000) | // move byte 1 to byte 2
                     ((data_size>>8)&0xff00) | // move byte 2 to byte 1
                     ((data_size<<24)&0xff000000); // byte 0 to byte 3
@@ -82,12 +81,11 @@ DataVector readAuFile(const std::string fileName) {
 
     //reading encoding
     U32 enc;
-    U32 swapped_enc;
     myFile.read(reinterpret_cast<char *>(&enc), sizeof(uint32_t));
-    swapped_enc = ((enc>>24)&0xff) | // move byte 3 to byte 0
-                    ((enc<<8)&0xff0000) | // move byte 1 to byte 2
-                    ((enc>>8)&0xff00) | // move byte 2 to byte 1
-                    ((enc<<24)&0xff000000); // byte 0 to byte 3
+//    U32 swapped_enc = ((enc>>24)&0xff) | // move byte 3 to byte 0
+//                    ((enc<<8)&0xff0000) | // move byte 1 to byte 2
+//                    ((enc>>8)&0xff00) | // move byte 2 to byte 1
+//                    ((enc<<24)&0xff000000); // byte 0 to byte 3
 //    std::cout <<"Encodage: "<< swapped_enc<< std::endl;
 
     //reading two more header words
