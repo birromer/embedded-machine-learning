@@ -9,7 +9,7 @@ import graphviz
 from CART import *
 
 # Extract dataset training
-dataset = '../../data/features_training.csv'
+dataset = '../../DATA/features_training.csv'
 #dataset = '../../data/features_prof.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
@@ -26,7 +26,7 @@ print(features, classes)
 print("Nb classes:", classes.shape)
 
 # Extract dataset testing
-dataset = '../../data/features_testing.csv'
+dataset = '../../DATA/features_testing.csv'
 crop_df = pd.read_csv(dataset, header=0)
 
 print("Head testing:\n", crop_df.head)
