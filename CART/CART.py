@@ -124,7 +124,7 @@ class CartTree:
 {}}}""".format(t1, self.feature, self.threshold, self.left.__str__(), t1, self.right.__str__(), t1)
 
     def generate_prefict_cpp(self):
-        cpp = open("../music_styles_cart.cpp", "w+")
+        cpp = open("./CART/music_styles_cart.cpp", "w+")
 
         cpp.write("""#include <string>
 #include <vector>

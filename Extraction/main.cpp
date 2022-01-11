@@ -40,7 +40,7 @@ int main() {
     }
     paths_test.close();
 
-    compute_set_of_features(training_files, "./DATA/features.csv", true);
+    compute_set_of_features(training_files, "./DATA/features_training.csv", true);
 
     // In a real world application, the input audio files may come from outside this
     // file list but here they are computed for diminishing repetitive computations,

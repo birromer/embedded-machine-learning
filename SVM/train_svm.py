@@ -11,7 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-DATA_DIR = "../../DATA"
+DATA_DIR = "./DATA"
 FEAT_TRAIN_FILE = "features_training.csv"
 FEAT_TEST_FILE = "features_testing.csv"
 ALL_DATA_FILE = "features_prof.csv"

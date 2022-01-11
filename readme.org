@@ -34,6 +34,7 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 │   ├── features.csv
 │   ├── features_prof.csv
 │   ├── features_testing.csv
+│   ├── features_training.csv
 │   ├── file_list_test.txt
 │   ├── file_list_train.txt
 │   ├── hiphop
@@ -68,7 +69,7 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
     ├── music_styles_svm.cpp
     └── svm.py
 
-19 directories, 27 files
+19 directories, 28 files
 #+end_example
 
 Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.
@@ -86,11 +87,14 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 ** Usage
 The first step is to compile the source code, which can be done with the following block, working for both a personal computer and a Raspberry Pi board.
 
-#+begin_src bash :tangle "setup.sh" :exports code :results silent
+#+begin_src bash :tangle "setup.sh" :exports code :results silent :mkdirp yes
+# build feature extraction
 mkdir -p build
-cmake -S . -B build
+cmake -S Extraction -B build  # "Extraction" may be replaced by the desired module or . for the entire project
 make -C build
 #+end_src
+
+Only the needed module is compiled now, as some files needed for further building the modules are generated in the following steps. An example is CART, which will only have its prediction tree after the training done in Python.
 
 *** Feature extraction
 The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data.
@@ -102,19 +106,54 @@ The features are extracted to the files =features_training.csv= and =features_te
 Having the project built, the extraction can be executed with the following command:
 
 #+begin_src bash :tangle "setup.sh" :exports code :results silent
-./build/Extraction/EXTRACTION
+# extract features
+./build/EXTRACTION
 #+end_src
 
 *** CART
 In order to use the CART algorithm, you must first build the classification tree.
-#+begin_src bash :tangle yes
-  python3 CART/train_cart.py
+#+begin_src bash :tangle "setup.sh" :results silent
+# train cart tree
+python3 CART/train_cart.py
 #+end_src
 
-#+RESULTS:
+This will generate the file =CART/music_styles_cart.cpp=, with a function corresponding to a sequence of if/else's analog to the trained binary tree paths.
 
 *** SVM
+So to use the SVM model, we must first also execute the related Python script
+
+#+begin_src bash :tangle "setup.sh" :export code :results silent
+# train svm model
+python3 SVM/train_svm.py
+#+end_src
+
+This will generate the files =DATA/svm_coeff.csv=, with the weights and bias for the hyperplanes in the model, and =DATA/svm_feat_Stats.csv=, with the statistical attributes of the features used in training, so that it can be replicated during prediction.
 
 *** ANN
+The usage of the ANN method requires first the training of the associated neural network, also specified in a Python script
+
+#+begin_src bash :tangle "setup.sh" :export code
+# train ann
+python3 ANN/train_ann.py
+#+end_src
+
 
 * Results
+The results are again separated by method, being the related code executable from compiling the Evaluation folder.
+
+#+begin_src bash :tangle "evaluation.sh" :export code :results silent
+# build evaluation code
+cmake -S Evaluation -B build
+make -C build
+#+end_src
+
+** CART
+The accuracy and confusion matrix from CART can be found with the following command:
+#+begin_src bash :tangle "evaluation.sh" :export both
+# execute cart evaluation
+./build/EVALUATION_CART
+#+end_src
+
+** SVM
+
+** ANN
