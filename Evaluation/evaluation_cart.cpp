@@ -39,8 +39,8 @@ int main() {
 
     std::string prediction = cart_predict(feature_vector);
 
-    std::cout << "Rad file -> " << filename << std::endl;
-    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+//    std::cout << "Rad file -> " << filename << std::endl;
+//    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
 
     if (!prediction.compare(music_type))
       count_hits += 1;
@@ -48,7 +48,7 @@ int main() {
     total_read += 1;
   }
 
-  std::cout << "accuracy: " << (float) count_hits / (float) total_read << std::endl;
+  std::cout << std::endl << "CART accuracy: " << (float) count_hits / (float) total_read << std::endl;
 
   return 0;
 }

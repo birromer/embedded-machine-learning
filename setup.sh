@@ -1,7 +1,7 @@
 # build feature extraction
 mkdir -p build/setup
-cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module or . for the entire project
-make -C build/setup
+cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module
+make -C build/setup                 # or . for the entire project
 
 # extract features
 ./build/setup/EXTRACTION

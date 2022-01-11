@@ -76,7 +76,7 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 
 - =DATA/= :: Contains the audio files from the dataset. They were not included because of their size, but this view shows the necessary organization for reproducible results.
 
-- =Extraction/=  :: Contains the feature extraction code, implemented only using STFT.
+- =Extraction/= :: Contains the feature extraction code, implemented only using STFT.
 
 - =Helpers/= :: Contains a multitude of utilities, such as for signal processing, global definitions, and labels management.
 
@@ -86,14 +86,16 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 
 ** Requirements
 
+All of the libraries used should be included in a standard building system installation. The only addition is [[https://www.tensorflow.org/][Tensorflow]], for training neural networks. Installation instructions can be found in the [[https://www.tensorflow.org/install/pip][official documentation]].
+
 ** Usage
 The first step is to compile the source code, which can be done with the following block, working for both a personal computer and a Raspberry Pi board.
 
 #+begin_src bash :tangle "setup.sh" :exports code :results silent :mkdirp yes
 # build feature extraction
 mkdir -p build/setup
-cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module or . for the entire project
-make -C build/setup
+cmake -S Extraction -B build/setup  # "Extraction" may be replaced by the desired module
+make -C build/setup                 # or . for the entire project
 #+end_src
 
 Only the needed module is compiled now, as some files needed for further building the modules are generated in the following steps. An example is CART, which will only have its prediction tree after the training done in Python.
@@ -113,7 +115,8 @@ Having the project built, the extraction can be executed with the following comm
 #+end_src
 
 *** CART
-In order to use the CART algorithm, you must first build the classification tree.
+In order to use the CART algorithm, you must first build the classification tree:
+
 #+begin_src bash :tangle "setup.sh" :results silent
 # train cart tree
 python3 CART/train_cart.py
@@ -122,7 +125,7 @@ python3 CART/train_cart.py
 This will generate the file =CART/music_styles_cart.cpp=, with a function corresponding to a sequence of if/else's analog to the trained binary tree paths.
 
 *** SVM
-So to use the SVM model, we must first also execute the related Python script
+So to use the SVM model, we must first also execute the related Python script:
 
 #+begin_src bash :tangle "setup.sh" :export code :results silent
 # train svm model
@@ -132,7 +135,7 @@ python3 SVM/train_svm.py
 This will generate the files =DATA/svm_coeff.csv=, with the weights and bias for the hyperplanes in the model, and =DATA/svm_feat_Stats.csv=, with the statistical attributes of the features used in training, so that it can be replicated during prediction.
 
 *** ANN
-The usage of the ANN method requires first the training of the associated neural network, also specified in a Python script
+The usage of the ANN method requires first the training of the associated neural network, also specified in a Python script:
 
 #+begin_src bash :tangle "setup.sh" :export code
 # train ann
@@ -141,9 +144,8 @@ python3 ANN/train_ann.py
 
 <COMPLETE WITH OUTPUT WEIGHTS FILE>
 
-
-* Results
-The results are again separated by method, being the related code executable from compiling the Evaluation folder.
+*** Evaluation
+In order to run the evaluation of the learning methods, it is necessary first to compile the Evaluation module, as in the following block:
 
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # build evaluation code
@@ -152,15 +154,20 @@ cmake -S Evaluation -B build/eval
 make -C build/eval
 #+end_src
 
-** CART
-The accuracy and confusion matrix from CART can be found with the following command:
-#+begin_src bash :tangle "eval.sh" :export both
-# execute cart evaluation
+An executable is generated per method, with execution exemplified bellow:
+#+begin_src bash :tangle "eval.sh" :export code :results silent
+# CART evaluation
 ./build/eval/EVALUATION_CART
+
+# SVM evaluation
+./build/eval/EVALUATION_SVM
+
+# ANN evaluation
+#./build/eval/EVALUATION_SVM
 #+end_src
 
-#+RESULTS:
 
-** SVM
+* Development
+The development of the present project has followed the order in
 
-** ANN
+* Results
