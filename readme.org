@@ -98,9 +98,13 @@ make -C build
 #+end_src
 
 *** Feature extraction
-The first step is to extract the features from the audio files. In our case we'll be using only the ones in the dataset, which are separated in the first execution in training and testing data.
+The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data.
 
-Having the system built, the extraction can be executed with the following command:
+It outputs to the data folder the files =file_list_train.txt= and =file_list_test.txt=, with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
+
+The features are extracted to the files =features_training.csv= and =features_testing.csv=. They correspond to the aforementioned data and are already computed to avoid repeated calls.
+
+Having the project built, the extraction can be executed with the following command:
 
 #+begin_src bash :tangle "setup.sh" :exports code :results silent
 ./build/Extraction/EXTRACTION
@@ -114,8 +118,8 @@ In order to use the CART algorithm, you must first build the classification tree
 
 #+RESULTS:
 
-*** RF
 *** SVM
+
 *** ANN
 
 * Results
