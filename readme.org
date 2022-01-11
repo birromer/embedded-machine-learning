@@ -15,7 +15,7 @@ A full description of the project can be found in the [[https://gitlab.ensta-bre
 The project is organized as follows:
 
 #+begin_src bash :exports results :results output
-tree -n -L 2 -I CMake*
+tree -n -L 2 -I 'build|CMake*|__pycache__'
 #+end_src
 
 #+RESULTS:
@@ -23,16 +23,9 @@ tree -n -L 2 -I CMake*
 .
 ├── ANN
 │   └── Python
-├── build
-│   ├── CART
-│   ├── CMakeCache.txt
-│   ├── CMakeFiles
-│   ├── cmake_install.cmake
-│   ├── Extraction
-│   ├── Makefile
-│   └── SVM
 ├── CART
-│   └── Python
+│   ├── CART.py
+│   └── train_cart.py
 ├── DATA
 │   ├── blues
 │   ├── classical
@@ -67,13 +60,15 @@ tree -n -L 2 -I CMake*
 │   ├── print_helpers.h
 │   ├── signal.h
 │   └── wav_reading.h
+├── readme.bash
 ├── readme.org
 ├── RF
+├── setup.sh
 └── SVM
     ├── music_styles_svm.cpp
-    └── Python
+    └── svm.py
 
-26 directories, 25 files
+19 directories, 27 files
 #+end_example
 
 Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.
