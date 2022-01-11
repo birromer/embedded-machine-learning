@@ -8,7 +8,7 @@
 
 int main() {
     auto beg = std::chrono::high_resolution_clock::now();
-    auto dirs = alpha_dir_listing("../DATA/");
+    auto dirs = alpha_dir_listing("./DATA/");
     std::vector<std::filesystem::path> training_files;
     std::vector<std::filesystem::path> testing_files;
 
@@ -26,28 +26,28 @@ int main() {
     std::cout << "# training -->  " << training_files.size() << std::endl;
     std::cout << "# testing -->  " << testing_files.size() << std::endl;
 
-    std::ofstream paths_train("../DATA/file_list_train.txt");
+    std::ofstream paths_train("./DATA/file_list_train.txt");
     for (auto elem: training_files) {
         std::cout << "Training --> " << elem << std::endl;
         paths_train << elem.string() << std::endl;
     }
     paths_train.close();
 
-    std::ofstream paths_test("../DATA/file_list_test.txt");
+    std::ofstream paths_test("./DATA/file_list_test.txt");
     for (auto elem: testing_files) {
         std::cout << "Testing --> " << elem << std::endl;
         paths_test << elem.string() << std::endl;
     }
     paths_test.close();
 
-    compute_set_of_features(training_files, "../DATA/features.csv", true);
+    compute_set_of_features(training_files, "./DATA/features.csv", true);
 
     // In a real world application, the input audio files may come from outside this
     // file list but here they are computed for diminishing repetitive computations,
     // as we don't change those sets
 
     if (testing_files.size() > 0)
-      compute_set_of_features(testing_files, "../DATA/features_testing.csv", true);
+      compute_set_of_features(testing_files, "./DATA/features_testing.csv", true);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << std::chrono::duration_cast<std::chrono::seconds>(end - beg).count() << " s" << std::endl;

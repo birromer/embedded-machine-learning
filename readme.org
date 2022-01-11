@@ -15,7 +15,7 @@ A full description of the project can be found in the [[https://gitlab.ensta-bre
 The project is organized as follows:
 
 #+begin_src bash :exports results :results output
-tree -nd -L 2
+tree -n -L 2 -I CMake*
 #+end_src
 
 #+RESULTS:
@@ -23,6 +23,14 @@ tree -nd -L 2
 .
 ├── ANN
 │   └── Python
+├── build
+│   ├── CART
+│   ├── CMakeCache.txt
+│   ├── CMakeFiles
+│   ├── cmake_install.cmake
+│   ├── Extraction
+│   ├── Makefile
+│   └── SVM
 ├── CART
 │   └── Python
 ├── DATA
@@ -30,32 +38,84 @@ tree -nd -L 2
 │   ├── classical
 │   ├── country
 │   ├── disco
+│   ├── features.csv
+│   ├── features_prof.csv
+│   ├── features_testing.csv
+│   ├── file_list_test.txt
+│   ├── file_list_train.txt
 │   ├── hiphop
 │   ├── jazz
 │   ├── metal
 │   ├── pop
 │   ├── reggae
-│   └── rock
+│   ├── rock
+│   └── tests.org
 ├── Evaluation
+│   ├── evaluate_cart.cpp
+│   └── evaluation_svm.cpp
 ├── Extraction
+│   ├── features_extraction.cpp
+│   ├── features_extraction.h
+│   └── main.cpp
 ├── Helpers
+│   ├── au_reading.h
+│   ├── etypes.h
+│   ├── file_helpers.h
+│   ├── globals.h
+│   ├── music_style_helpers.cpp
+│   ├── music_style_helpers.h
+│   ├── print_helpers.h
+│   ├── signal.h
+│   └── wav_reading.h
+├── readme.org
 ├── RF
 └── SVM
+    ├── music_styles_svm.cpp
     └── Python
 
-21 directories
+26 directories, 25 files
 #+end_example
 
 Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.
 
-=DATA/= contains the audio files from the dataset. They were not included because of their size, but this view shows the necessary organization for reproducible results.
+- =DATA/= :: Contains the audio files from the dataset. They were not included because of their size, but this view shows the necessary organization for reproducible results.
 
-=Extraction/= contains the feature extraction code and =Helpers/= a multitude of utilities, such as for signal processing, global definitions, and labels management.
+- =Extraction/=  :: Contains the feature extraction code, implemented only using STFT.
 
-=Evaluation/= contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
+- =Helpers/= :: Contains a multitude of utilities, such as for signal processing, global definitions, and labels management.
+
+- =Evaluation/= :: Contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
 
 ** Requirements
 
 ** Usage
+The first step is to compile the source code, which can be done with the following block, working for both a personal computer and a Raspberry Pi board.
+
+#+begin_src bash :tangle "setup.sh" :exports code :results silent
+mkdir -p build
+cmake -S . -B build
+make -C build
+#+end_src
+
+*** Feature extraction
+The first step is to extract the features from the audio files. In our case we'll be using only the ones in the dataset, which are separated in the first execution in training and testing data.
+
+Having the system built, the extraction can be executed with the following command:
+
+#+begin_src bash :tangle "setup.sh" :exports code :results silent
+./build/Extraction/EXTRACTION
+#+end_src
+
+*** CART
+In order to use the CART algorithm, you must first build the classification tree.
+#+begin_src bash :tangle yes
+  python3 CART/train_cart.py
+#+end_src
+
+#+RESULTS:
+
+*** RF
+*** SVM
+*** ANN
 
 * Results

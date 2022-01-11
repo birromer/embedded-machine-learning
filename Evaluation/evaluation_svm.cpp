@@ -10,8 +10,14 @@
 #include "../Extraction/features_extraction.h"
 #include "../Helpers/au_reading.h"
 
+// Learned SVM coefficients
 const std::string path_svm_coeff = "../DATA/svm_coeff.csv";
 const std::string path_svm_stats = "../DATA/svm_feat_stats.csv";
+
+// File containing the path of all testing files
+const std::string path_list_test = "../DATA/file_list_test.txt";
+
+// Extracted features of the testing files
 const std::string path_features_testing = "../DATA/features_testing.csv";
 
 #define N_CLASSES 10
