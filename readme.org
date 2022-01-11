@@ -1,0 +1,61 @@
+#+TITLE: Embedded Machine Learning
+
+* Introduction
+This project aims at implementing and testing machine learning algorithms adapted for an embedded environment. The following classifiers were used:
+
+- Classification and Regression Trees (CART)
+- Support Vector Machines (SVM)
+- Artificial Neural Networks (ANN)
+
+The task at hand is the identification of musical styles, which is tackled using the [[https://www.kaggle.com/carlthome/gtzan-genre-collection][GTZAN Genre Collection]] dataset. Here, each audio file is stored using the [[https://en.wikipedia.org/wiki/Au_file_format][AU file format]]. A reader has been implemented for this file format, as well as a feature extraction using a [[https://en.wikipedia.org/wiki/Short-time_Fourier_transform#Discrete-time_STFT][Discrete Short-time Fourier transform]].
+
+A full description of the project can be found in the [[https://gitlab.ensta-bretagne.fr/reynetol/embedded-machine-learning][original repository]], together with the base helper routines provided.
+
+* Setup
+The project is organized as follows:
+
+#+begin_src bash :exports results :results output
+tree -nd -L 2
+#+end_src
+
+#+RESULTS:
+#+begin_example
+.
+├── ANN
+│   └── Python
+├── CART
+│   └── Python
+├── DATA
+│   ├── blues
+│   ├── classical
+│   ├── country
+│   ├── disco
+│   ├── hiphop
+│   ├── jazz
+│   ├── metal
+│   ├── pop
+│   ├── reggae
+│   └── rock
+├── Evaluation
+├── Extraction
+├── Helpers
+├── RF
+└── SVM
+    └── Python
+
+21 directories
+#+end_example
+
+Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.
+
+=DATA/= contains the audio files from the dataset. They were not included because of their size, but this view shows the necessary organization for reproducible results.
+
+=Extraction/= contains the feature extraction code and =Helpers/= a multitude of utilities, such as for signal processing, global definitions, and labels management.
+
+=Evaluation/= contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
+
+** Requirements
+
+** Usage
+
+* Results
