@@ -166,6 +166,7 @@ An executable is generated per method, with execution exemplified bellow:
 #./build/eval/EVALUATION_SVM
 #+end_src
 
+In practice, the codes related to the prediction using each algorithm is stored in their respective folder, and it is used for this statistical performance analysis defined withing the Evaluation module.
 
 * Development
 The development of the present project has followed the order in
