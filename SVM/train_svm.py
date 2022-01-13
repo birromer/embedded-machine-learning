@@ -46,10 +46,9 @@ if __name__ == "__main__":
     # reduce the dimension and train
     svm_clf = Pipeline([
 #        ("scaler", StandardScaler()),
-#        ("linear_svc", SVC(kernel='linear', class_weight='balanced', gamma=0.0001, C=1, decision_function_shape='ovo')),
-        ("linear_svc", LinearSVC(C=1.0, loss='hinge', verbose=0, max_iter=2000)),
+        ("linear_svc", SVC(kernel='linear', class_weight='balanced', gamma=0.0001, C=1, decision_function_shape='ovo')),
+#        ("linear_svc", LinearSVC(C=1.0, loss='hinge', verbose=0, max_iter=2000)),
     ])
-
 
     svm_clf.fit(X_train, y_train)
     print("Fit SVM model with train data.")
@@ -82,16 +81,6 @@ if __name__ == "__main__":
     header = ['COEF{}'.format(i) for i in range(coef.shape[1]+1)]+['BIAS']
 
     np.savetxt(os.path.join(DATA_DIR, 'svm_coeff.csv'), np.concatenate((coef,bias), axis=1), header=','.join(header), delimiter=',', comments='')
-
-#    feat_vec = X_test[0]
-#    print(feat_vec)
-#    Y = []
-#    for d,b in zip(coef,bias):
-#        print(d[0], b)
-#        y_n = np.dot(feat_vec, d) + b
-#        Y.append(y_n)
-#    print(Y)
-
 
 #    # Save featues statistical data
 #    mean = svm_clf['scaler'].mean_  # mean value of each feature in the training set

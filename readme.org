@@ -177,4 +177,19 @@ In practice, the codes related to the prediction using each algorithm is stored 
 * Development
 The development of the present project has followed the order in
 
+** CART
+
+
+** SVM
+The SVM algorithm was first tested on python using the =linearSVC= function from /sklearn/, with accuracy values that did not match the ones informed by the professor. With that in mind, the pipeline was changed so to use the =SVC= function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
+
+The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation.
+
+The training script is located at =SVM/train_svm.py= and the prediction at =SVM/musical_types_svm.cpp=.
+
+** ANN
+
 * Results
+:PROPERTIES:
+:CUSTOM_ID: sec.results
+:END:
