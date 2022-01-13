@@ -17,7 +17,7 @@ const std::string path_svm_stats = "./DATA/svm_feat_stats.csv";
 
 std::vector<std::vector<double>> load_svm_model() {
   std::ifstream svm_coeffs(path_svm_coeff);
-  std::string temp_str, header, bias, filename;
+  std::string temp_str, header;
 
   std::getline(svm_coeffs, header);
 

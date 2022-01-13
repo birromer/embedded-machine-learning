@@ -10,4 +10,4 @@ make -C build/eval
 ./build/eval/EVALUATION_SVM
 
 # ANN evaluation
-#./build/eval/EVALUATION_SVM
+./build/eval/EVALUATION_ANN

@@ -7,7 +7,7 @@
 #include <filesystem>
 #include "../Helpers/globals.h"
 #include "../Helpers/music_style_helpers.h"
-#include "../SVM/music_styles_svm.cpp"
+#include "../SVM/prediction_svm.cpp"
 
 // File containing the path of all testing files
 const std::string path_list_test = "./DATA/file_list_test.txt";
@@ -47,10 +47,9 @@ int main() {
     music_type.erase(0,2);
 
     int prediction = svm_predict(feature_vector, svm_model);
-//    std::cout << "Prediction: " << prediction << std::endl;
-    std::cout << "Read file -> " << filename << std::endl;
-    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
-    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+//    std::cout << "Read file -> " << filename << std::endl;
+//    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
+//    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
 
     if (music_style_from_int(prediction) == music_style_from_string(music_type))
       count_hits += 1;

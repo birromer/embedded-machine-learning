@@ -5,7 +5,7 @@
 #include <filesystem>
 #include "../Helpers/globals.h"
 #include "../Extraction/features_extraction.h"
-#include "../CART/music_styles_cart.h"
+#include "../CART/prediction_cart.cpp"
 
 
 int main() {
