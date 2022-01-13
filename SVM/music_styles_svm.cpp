@@ -54,6 +54,8 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // perform each of the 45 duels
   for (std::vector<double> duel : duel_coeffs) {
     // matrix multiplication, line by line, base value of the sum being the bias
+    // this can be done without extra steps as the function respects the size of the first parameters
+    // letting the bias be present without being used in the main sum
     double y_n = std::inner_product(feat_vec.begin(), feat_vec.end(), duel.begin(), *(duel.end()-1));
     Y.push_back(y_n);
   }
@@ -63,7 +65,6 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // they are in the order 0v1, 0v2, 0v3, ..., NvN-1
 
   // counter of duels won by each class
-  // index 0 stores the values for the last class
   std::vector<int> duels_score( N_CLASSES, 0);
 
   int i = 0;
@@ -80,6 +81,7 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
     }
   }
 
+  // gets the position of the maximum value with iterator arithmetic
   int argmax = std::max_element(duels_score.begin(), duels_score.end()) - duels_score.begin();
 
   return argmax;
