@@ -22,9 +22,13 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 #+begin_example
 .
 ├── ANN
-│   └── Python
+│   └── train_ann.py
 ├── CART
 │   ├── CART.py
+│   ├── Crop recommandations
+│   ├── Crop recommandations.pdf
+│   ├── music_styles_cart.cpp
+│   ├── music_styles_cart.h
 │   └── train_cart.py
 ├── DATA
 │   ├── blues
@@ -43,9 +47,12 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 │   ├── pop
 │   ├── reggae
 │   ├── rock
+│   ├── svm_coeff.csv
+│   ├── svm_feat_stats.csv
 │   └── tests.org
+├── eval.sh
 ├── Evaluation
-│   ├── evaluate_cart.cpp
+│   ├── evaluation_cart.cpp
 │   └── evaluation_svm.cpp
 ├── Extraction
 │   ├── features_extraction.cpp
@@ -61,15 +68,14 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 │   ├── print_helpers.h
 │   ├── signal.h
 │   └── wav_reading.h
-├── readme.bash
 ├── readme.org
 ├── RF
 ├── setup.sh
 └── SVM
     ├── music_styles_svm.cpp
-    └── svm.py
+    └── train_svm.py
 
-19 directories, 28 files
+18 directories, 35 files
 #+end_example
 
 Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.

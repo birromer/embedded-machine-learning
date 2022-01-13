@@ -15,7 +15,6 @@ const std::string path_list_test = "./DATA/file_list_test.txt";
 // Extracted features of the testing files
 const std::string path_features_testing = "./DATA/features_testing.csv";
 
-
 int main() {
   std::ifstream features_testing(path_features_testing);
 
@@ -48,11 +47,10 @@ int main() {
     music_type.erase(0,2);
 
     int prediction = svm_predict(feature_vector, svm_model);
-//    std::cout << "prediction: " << prediction << std::endl;
-//
-//    std::cout << "Read file -> " << filename << std::endl;
-//    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
-//    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+//    std::cout << "Prediction: " << prediction << std::endl;
+    std::cout << "Read file -> " << filename << std::endl;
+    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
+    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
 
     if (music_style_from_int(prediction) == music_style_from_string(music_type))
       count_hits += 1;

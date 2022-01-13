@@ -51,13 +51,27 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // apply Y = A@X + B, where A has the coefficients (coef_),
   // B has the bias (intercept_) and X is the features vector
 
+//  std::cout << "feat_vec: ";
+//  for (auto val : feat_vec) {
+//    std::cout << val << " ";
+//  }
+//  std::cout << std::endl << std::endl;
+
   // perform each of the 45 duels
   for (std::vector<double> duel : duel_coeffs) {
-    // matrix multiplication, line by line
-    double y_n = std::inner_product(feat_vec.begin(), feat_vec.end(), duel.begin(), 0);
-    y_n +=  duel[-1]; // add bias
+    // matrix multiplication, line by line, base value of the sum being the bias
+    double y_n = std::inner_product(feat_vec.begin(), feat_vec.end(), duel.begin(), *(duel.end()-1));
     Y.push_back(y_n);
   }
+
+//  std::cout << "Y: ";
+//  for (auto val : Y) {
+//    std::cout << val << " ";
+//  }
+//  std::cout << std::endl;
+//
+//  int temp;
+//  std::cin >>  temp;
 
   // we'll have a 45x1 vector (10x9/2 classes) with all duels on
   // the 1v1 classifier, must choose the one that wins the most
@@ -67,18 +81,23 @@ int svm_predict(std::vector<double> feat_vec, std::vector<std::vector<double>> d
   // index 0 stores the values for the last class
   std::vector<int> duels_score( N_CLASSES, 0);
 
-  int i = 0;
-  for (int p1 = 0; p1 < N_CLASSES; p1++) {
-    for (int p2 = p1+1; p2 < N_CLASSES; p2++) {
-      duels_score[p1] += Y[i];
-      duels_score[p2] -= Y[i];
-      i++;
-    }
-  }
+//  int i = 0;
+//  for (int p1 = 0; p1 < N_CLASSES; p1++) {
+//    for (int p2 = p1+1; p2 < N_CLASSES; p2++) {
+//
+//      if (Y[i] > 0) {
+//        duels_score[p1]++;
+//      } else {
+//        duels_score[p2]++;
+//      }
+//
+//      i++;
+//    }
+//  }
 
-  int argmax = std::max_element(duels_score.begin(), duels_score.end()) - duels_score.begin();
+//  int argmax = std::max_element(duels_score.begin(), duels_score.end()) - duels_score.begin();
 
-//  int argmax = std::max_element(Y.begin(), Y.end()) - Y.begin();
+  int argmax = std::max_element(Y.begin(), Y.end()) - Y.begin();
 
   return argmax;
 }

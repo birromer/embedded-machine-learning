@@ -15,7 +15,6 @@ DATA_DIR = "./DATA"
 FEAT_TRAIN_FILE = "features_training.csv"
 FEAT_TEST_FILE = "features_testing.csv"
 ALL_DATA_FILE = "features_prof.csv"
-#ALL_DATA_FILE = "features.csv"
 
 def load_data(filename):
     data_path = os.path.join(DATA_DIR, filename)
@@ -46,9 +45,9 @@ if __name__ == "__main__":
 
     # reduce the dimension and train
     svm_clf = Pipeline([
-        ("scaler", StandardScaler()),
-        ("linear_svc", SVC(kernel='linear', class_weight='balanced', gamma=0.0001, C=1, decision_function_shape='ovo')),
-#        ("linear_svc", LinearSVC(C=1.0, loss='hinge', verbose=0, max_iter=2000)),
+#        ("scaler", StandardScaler()),
+#        ("linear_svc", SVC(kernel='linear', class_weight='balanced', gamma=0.0001, C=1, decision_function_shape='ovo')),
+        ("linear_svc", LinearSVC(C=1.0, loss='hinge', verbose=0, max_iter=2000)),
     ])
 
 
@@ -71,19 +70,7 @@ if __name__ == "__main__":
 
     print("Accuracy:", float(np.sum(predictions == y_test))/len(y_test))
 
-    # Save featues statistical data
-    mean = svm_clf['scaler'].mean_  # mean value of each feature in the training set
-    var = svm_clf['scaler'].var_    # variance of each feature in the training set
-    mean = mean.reshape((len(mean),1))
-    var = var.reshape((len(var),1))
-
-    header = ['SVG{}'.format(i) for i in range(len(mean)+1)] + ['VAR{}'.format(i) for i in range(len(var)+1)]
-
-    print("mean shape", mean.shape)
-    print("var shape", var.shape)
-
-    np.savetxt(os.path.join(DATA_DIR, 'svm_feat_stats.csv'), np.concatenate((mean,var), axis=0).T, header=','.join(header), delimiter=',', comments='')
-
+    # Save featuers coefficients and bias
     coef = svm_clf['linear_svc'].coef_  # feature weights in the learnt model
     bias = svm_clf['linear_svc'].intercept_  # bias in the decision function
 
@@ -95,3 +82,26 @@ if __name__ == "__main__":
     header = ['COEF{}'.format(i) for i in range(coef.shape[1]+1)]+['BIAS']
 
     np.savetxt(os.path.join(DATA_DIR, 'svm_coeff.csv'), np.concatenate((coef,bias), axis=1), header=','.join(header), delimiter=',', comments='')
+
+#    feat_vec = X_test[0]
+#    print(feat_vec)
+#    Y = []
+#    for d,b in zip(coef,bias):
+#        print(d[0], b)
+#        y_n = np.dot(feat_vec, d) + b
+#        Y.append(y_n)
+#    print(Y)
+
+
+#    # Save featues statistical data
+#    mean = svm_clf['scaler'].mean_  # mean value of each feature in the training set
+#    var = svm_clf['scaler'].var_    # variance of each feature in the training set
+#    mean = mean.reshape((len(mean),1))
+#    var = var.reshape((len(var),1))
+#
+#    header = ['SVG{}'.format(i) for i in range(len(mean)+1)] + ['VAR{}'.format(i) for i in range(len(var)+1)]
+#
+#    print("mean shape", mean.shape)
+#    print("var shape", var.shape)
+#
+#    np.savetxt(os.path.join(DATA_DIR, 'svm_feat_stats.csv'), np.concatenate((mean,var), axis=0).T, header=','.join(header), delimiter=',', comments='')

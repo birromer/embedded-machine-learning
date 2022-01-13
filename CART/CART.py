@@ -75,7 +75,15 @@ class CartTree:
         print("Best Feature to split : ", self.feature, " Gain : ", self.purity_gain, " Threshold : ", self.threshold)
 
         # Let the tree grow to the left and the right !
-        left_features = features[features[:, self.feature] <= self.threshold]  # select features
+        try:
+            left_features = features[features[:, self.feature] <= self.threshold]  # select features
+        except TypeError:
+            print("best_gain",best_gain)
+            print("self.threshold", self.threshold)
+            print("self.feature", self.feature)
+            print("features[:, self.feature", features[:, self.feature])
+            print("features[features[:, self.feature]", features[features[:, self.feature]])
+
         left_target = target[features[:, self.feature] <= self.threshold]  # select associated targets
         self.left = CartTree()
         self.left.depth = self.depth + 1

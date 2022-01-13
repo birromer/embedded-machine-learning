@@ -1,3 +1,4 @@
+# Dataset
 DATA/
 
 # Prerequisites
@@ -37,6 +38,8 @@ cmake-build-*/
 
 .DS_store
 
+# Temporary files
 build/
 CART/Python/__pycache__
 CART/__pycache__
+CART/.mypy_cache

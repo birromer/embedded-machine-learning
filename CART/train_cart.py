@@ -43,7 +43,7 @@ X_test = crop_df.values
 
 # My CART_TREES TREE
 print("Training !")
-myclassifier = CartTree(max_depth=12);
+myclassifier = CartTree(max_depth=8);  # it was 12
 myclassifier.fit(X_train, Y_train)
 print(myclassifier)
 myclassifier.generate_prefict_cpp()
