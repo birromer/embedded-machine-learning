@@ -16,17 +16,42 @@ const std::string path_list_test = "./DATA/file_list_test.txt";
 const std::string path_features_testing = "./DATA/features_testing.csv";
 
 int main() {
-  std::ifstream features_testing(path_features_testing);
 
   // svm model for all 1v1 duels
   std::vector<std::vector<double>> svm_model = load_svm_model();
 
+  int count_hits = 0;
+  int total_read = 0;
+
+  #ifdef USE_TESTS_FILE
+  std::cout << std::endl << "Extracting features from paths in file: " << path_list_test << std::endl;
+
+  std::ifstream paths_testing_files(path_list_test);
+  std::vector<std::filesystem::path> testing_files;
+  std::string temp_str;
+
+  while (std::getline(paths_testing_files, temp_str)) {
+    testing_files.push_back(temp_str);
+  }
+
+  auto all_features = compute_set_of_features(testing_files, path_features_testing, false);
+
+  for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
+    std::string music_type = it->first.parent_path().filename();
+    std::vector<double> feature_vector;
+
+    for (auto const &entry: it->second)
+       for (auto elem: entry.second)
+         feature_vector.push_back(elem);
+  #endif
+
+  #ifndef USE_TESTS_FILE
+  std::cout << std::endl << "Using extracted testing features:" << path_features_testing << std::endl;
+  std::ifstream features_testing(path_features_testing);
+
   std::string temp_str, header, music_type, filename;
 
   std::getline(features_testing, header);
-
-  int count_hits = 0;
-  int total_read = 0;
 
   while (std::getline(features_testing, temp_str)) {
     std::vector<double> feature_vector;
@@ -45,11 +70,15 @@ int main() {
     // remove quotation marks
     music_type.pop_back();
     music_type.erase(0,2);
+  #endif
 
     int prediction = svm_predict(feature_vector, svm_model);
-//    std::cout << "Read file -> " << filename << std::endl;
-//    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
-//    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+
+    #ifdef VERBOSE
+    std::cout << "Read file -> " << filename << std::endl;
+    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
+    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    #endif
 
     if (music_style_from_int(prediction) == music_style_from_string(music_type))
       count_hits += 1;
@@ -57,7 +86,7 @@ int main() {
     total_read += 1;
   }
 
-  std::cout << std::endl << "SVM accuracy: " << (float) count_hits / (float) total_read << std::endl;
+  std::cout << "SVM accuracy: " << (float) count_hits / (float) total_read << std::endl;
 
   return 0;
 }

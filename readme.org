@@ -161,15 +161,15 @@ In order to run the evaluation of the learning methods, it is necessary first to
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # build evaluation code
 mkdir -p build/eval
-cmake -S Evaluation -B build/eval
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF  # ON for using testing paths file
 make -C build/eval
 #+end_src
 
 The features used for testing have already been computed in the Extraction module, and the necessary learned attributes from their training scripts. As said before, everything is stored in the =Data/= folder.
 
-If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from the paths listed in =DATA/file_list_train.txt=. This file is also redundantly computed during extraction, matching the separation on training and testing datasets. To use it:
+If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of paths in =DATA/file_list_train.txt=. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if on. To use it:
 #+begin_src bash :tangle no :export code :results silent
-cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=ON
 #+end_src
 
 An executable is generated per method, with execution exemplified bellow:

@@ -23,7 +23,7 @@ int main() {
   int total_read = 0;
 
   #ifdef USE_TESTS_FILE
-  std::cout << "Extracting features from paths in file: " << path_list_test << std::endl;
+  std::cout << std::endl << "Extracting features from paths in file: " << path_list_test << std::endl;
 
   std::ifstream paths_testing_files(path_list_test);
   std::vector<std::filesystem::path> testing_files;
@@ -45,7 +45,7 @@ int main() {
   #endif
 
   #ifndef USE_TESTS_FILE
-  std::cout << "Using extracted testing features:" << path_features_testing << std::endl;
+  std::cout << std::endl << "Using extracted testing features:" << path_features_testing << std::endl;
   std::ifstream features_testing(path_features_testing);
 
   // load testing features
@@ -74,9 +74,11 @@ int main() {
 
     int prediction = ann_predict(feature_vector, ann_model);
 
-//    std::cout << "Read file -> " << filename << std::endl;
-//    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
-//    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    #ifdef VERBOSE
+    std::cout << "Read file -> " << filename << std::endl;
+    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
+    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    #endif
 
     if (music_style_from_int(prediction) == music_style_from_string(music_type))
       count_hits += 1;
@@ -84,7 +86,7 @@ int main() {
     total_read += 1;
   }
 
-  std::cout << std::endl << "ANN accuracy: " << (float) count_hits / (float) total_read << std::endl;
+  std::cout << "ANN accuracy: " << (float) count_hits / (float) total_read << std::endl;
 
   return 0;
 }
