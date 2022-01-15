@@ -189,13 +189,16 @@ Here, the codes related to the prediction using each algorithm is stored in thei
 * Implementation
 
 ** CART
-The generation of the CART profits from the implementation made available from the original repository, having it only to be adapted for the already split data and some testing was done with varying max depths. Some problems were encountered in its usage from failing expansion of the nodes, with invalid thresholds, but we could not find the source of the problem. Sometimes the training fails with a TypeError, but with repeated executions it works.
+The generation of the CART profits from the [[file:CART/CART.py][implementation]] made available from the original repository, having it only to be adapted for the already split data and some testing was done with varying max depths. Some problems were encountered in its usage from failing expansion of the nodes, with invalid thresholds, but we could not find the source of the problem. Sometimes the training fails with a TypeError, but with repeated executions it works.
 
 The main addition was the C++ code generation from the learned tree, were a recursive depth-first exploration generates conditionals that replicate the paths in code. The generated file is called [[file:SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]], and has a function that retrieves a literal string with the class from a given feature vector.
 
-*** Space complexity
-
 *** Time complexity
+During training, considering /n/ as the number of dimensions in a feature and /m/ as the number data elements in the l
+
+During prediction, considering /d/ as the depth of the learned binary tree, nothing but its transversal is performed, which corresponds to $O(log(d))$ complexity. /d/ is a bounded constant specified before training.
+
+*** Space complexity
 
 ** SVM
 The SVM algorithm was first tested on python using the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html][=linearSVC=]] function from /sklearn/, with accuracy values that did not match the ones informed by the professor with his feature set. With that in mind, the pipeline was changed so to use the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC][=SVC=]] function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
@@ -204,9 +207,12 @@ The interpretation of the coefficients for predicting the classes from new data 
 
 The training script is located at [[./SVM/train_svm.py][SVM/train_svm.py]] and the prediction at [[./SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]].
 
-*** Space complexity
-
 *** Time complexity
+For training, taking /n/ as the number of dimensions in a feature and /m/ as the number of data elements,
+
+For predicting, now considering /c/ as the number of classes, the result will come from processing Y in $Y = A \times X + B$, where A is a matrix of $(c * (c-1)/2$ rows and /n/ columns with the learned SVM coefficients, and B vector of size /c/ with the bias. Being a single threaded application, $O(c m)$ approximates the execution of its two nested loops, ignoring the "processing" part of Y as it's linear to the size of Y (a.k.a. number of rows in A)
+
+*** Space complexity
 
 ** ANN
 The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with [[https://keras.io/api/layers/activations/][ReLU activation]] and 1 output layer with [[https://www.tensorflow.org/api_docs/python/tf/nn/softmax][softmax activation]], as the results may be interpreted a probability distribution and their sum should total 1.
@@ -215,13 +221,16 @@ The [[https://keras.io/api/optimizers/rmsprop/][RMSprop]] optimizer was added to
 
 For performing predictions of classes in C++, the feed-forward step was implemented for a network of arbitrary architecture, but limited to ReLU and softmax activation functions. A custom text file is generated from the training script in order to save the weights and biases, with information on how many layers there are, and each layer starting with information of its dimensions. Each layer is represented by a MxN matrix, where each of the M rows represent a neuron composed of N weights, matching the input.
 
-Recent additions to the C++17 and C++20 standards were used to make comprehension easier and more straightforward, those being [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform]], [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform_reduce]] and [[https://en.cppreference.com/w/cpp/algorithm/inner_product][inner_product]] methods, some also present in the SVM implementation.
+Recent additions to the C++17 and C++20 standards were used to make comprehension easier and more straightforward, those being [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform]], [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform_reduce]] and [[https://en.cppreference.com/w/cpp/algorithm/inner_product][inner_product]] functions, some also present in the SVM implementation.
 
 The training script is located at [[file:ANN/train_ann.py][ANN/train_ann.py]] and the prediction in [[file:ANN/prediction_ann.cpp][ANN/prediction_ann.cpp]].
 
-*** Space complexity
-
 *** Time complexity
+For computing the complexity during training, we'll consider /n/ as the number of dimensions in a feature, /m/ as the number of data elements, /l/ as the number of layers, /n_i/ as the number of neurons in the layer i.
+
+When predicting classes, each feature vector of size /n/ will lead to /l/ matrix multiplications, always between matrices of shape /n_{i-2}/ x /n_{i-1} and /n_{i-1}/ x /n_{i}/, where i in {0..l}. This means that operations of n^3 time complexity will be performed /l/ times, with an added bias addition that can be ignored for notation. Between layers, either a softmax or ReLU activation is applied, but those are linear to their input and will disappear in worst case, leading to $O(l * n^3)$ complexity.
+
+*** Space complexity
 
 * Results and Analysis
 :PROPERTIES:
