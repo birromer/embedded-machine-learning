@@ -82,6 +82,7 @@ if __name__ == "__main__":
 
     np.savetxt(os.path.join(DATA_DIR, 'svm_coeff.csv'), np.concatenate((coef,bias), axis=1), header=','.join(header), delimiter=',', comments='')
 
+    # NOTE: removed bellow as no longer normalizing
 #    # Save featues statistical data
 #    mean = svm_clf['scaler'].mean_  # mean value of each feature in the training set
 #    var = svm_clf['scaler'].var_    # variance of each feature in the training set

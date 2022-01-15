@@ -22,15 +22,16 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 #+begin_example
 .
 ├── ANN
+│   ├── prediction_ann.cpp
 │   └── train_ann.py
 ├── CART
 │   ├── CART.py
 │   ├── Crop recommandations
 │   ├── Crop recommandations.pdf
-│   ├── music_styles_cart.cpp
-│   ├── music_styles_cart.h
+│   ├── prediction_cart.cpp
 │   └── train_cart.py
 ├── DATA
+│   ├── ann_weights.txt
 │   ├── blues
 │   ├── classical
 │   ├── country
@@ -52,8 +53,9 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 │   └── tests.org
 ├── eval.sh
 ├── Evaluation
-│   ├── evaluation_cart.cpp
-│   └── evaluation_svm.cpp
+│   ├── evaluate_ann.cpp
+│   ├── evaluate_cart.cpp
+│   └── evaluate_svm.cpp
 ├── Extraction
 │   ├── features_extraction.cpp
 │   ├── features_extraction.h
@@ -72,13 +74,13 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 ├── RF
 ├── setup.sh
 └── SVM
-    ├── music_styles_svm.cpp
+    ├── prediction_svm.cpp
     └── train_svm.py
 
-18 directories, 35 files
+18 directories, 37 files
 #+end_example
 
-Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python for it does not have to be embedded, and a classifier in C++.
+Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python, for it does not have to be embedded, and a classifier in C++.
 
 - =DATA/= :: Contains the audio files from the dataset. They were not included because of their size, but this view shows the necessary organization for reproducible results.
 
@@ -91,6 +93,9 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 =setup.sh= and =evaluation.sh= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
 
 ** Requirements
+:PROPERTIES:
+:CUSTOM_ID: sec.requirements
+:END:
 
 All of the libraries used should be included in a standard building system installation. The only addition is [[https://www.tensorflow.org/][Tensorflow]], for training neural networks. Installation instructions can be found in the [[https://www.tensorflow.org/install/pip][official documentation]].
 
@@ -160,6 +165,13 @@ cmake -S Evaluation -B build/eval
 make -C build/eval
 #+end_src
 
+The features used for testing have already been computed in the Extraction module, and the necessary learned attributes from their training scripts. As said before, everything is stored in the =Data/= folder.
+
+If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from the paths listed in =DATA/file_list_train.txt=. This file is also redundantly computed during extraction, matching the separation on training and testing datasets. To use it:
+#+begin_src bash :tangle no :export code :results silent
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE
+#+end_src
+
 An executable is generated per method, with execution exemplified bellow:
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # CART evaluation
@@ -172,22 +184,35 @@ An executable is generated per method, with execution exemplified bellow:
 ./build/eval/EVALUATION_ANN
 #+end_src
 
-In practice, the codes related to the prediction using each algorithm is stored in their respective folder, and it is used for this statistical performance analysis defined withing the Evaluation module.
+In practice, the codes related to the prediction using each algorithm is stored in their respective folder, and they are used for this statistical performance analysis defined withing the Evaluation module.
 
 * Development
-The development of the present project has followed the order in
 
 ** CART
 
+*** Space complexity
+
+*** Time complexity
 
 ** SVM
-The SVM algorithm was first tested on python using the =linearSVC= function from /sklearn/, with accuracy values that did not match the ones informed by the professor. With that in mind, the pipeline was changed so to use the =SVC= function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
+The SVM algorithm was first tested on python using the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html][=linearSVC=]] function from /sklearn/, with accuracy values that did not match the ones informed by the professor with his feature set. With that in mind, the pipeline was changed so to use the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC][=SVC=]] function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
 
 The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation.
 
 The training script is located at =SVM/train_svm.py= and the prediction at =SVM/musical_types_svm.cpp=.
 
+*** Space complexity
+
+*** Time complexity
+
 ** ANN
+The training part of the implementation was done in Python using the Tensorflow library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with a ReLU activation and 1 output layer with softmax activation, as the results may be interpreted a probability distribution and their sum should total 1.
+
+
+
+*** Space complexity
+
+*** Time complexity
 
 * Results
 :PROPERTIES:

@@ -19,7 +19,6 @@ FEAT_TEST_FILE = "features_testing.csv"
 ANN_WEIGHTS_FILE = "ann_weights.txt"
 
 def learningCurves(history,title):
-    #Learning curve plotting
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     t = f.suptitle(title, fontsize=12)
     f.subplots_adjust(top=0.85, wspace=0.3)

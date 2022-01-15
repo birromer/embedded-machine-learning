@@ -7,19 +7,46 @@
 #include "../Extraction/features_extraction.h"
 #include "../CART/prediction_cart.cpp"
 
+// File containing the path of all testing files
+const std::string path_list_test = "./DATA/file_list_test.txt";
+
+// Extracted features of the testing files
+std::string path_features_testing = "./DATA/features_testing.csv";
 
 int main() {
-  std::ifstream features_testing("./DATA/features_testing.csv");
-//  std::ifstream features_testing("./DATA/features_prof.csv");
+  int count_hits = 0;
+  int total_read = 0;
+
+  #ifdef USE_TESTS_FILE
+  std::cout << "Extracting features from paths in file: " << path_list_test << std::endl;
+
+  std::ifstream paths_testing_files(path_list_test);
+  std::vector<std::filesystem::path> testing_files;
+  std::string temp_str;
+
+  while (std::getline(paths_testing_files, temp_str)) {
+    testing_files.push_back(temp_str);
+  }
+
+  auto all_features = compute_set_of_features(testing_files, path_features_testing, false);
+
+  for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
+    std::string music_type = it->first.parent_path().filename();
+    std::vector<double> feature_vector;
+
+    for (auto const &entry: it->second)
+       for (auto elem: entry.second)
+         feature_vector.push_back(elem);
+  #endif
+
+  #ifndef USE_TESTS_FILE
+  std::cout << "Using extracted testing features:" << path_features_testing << std::endl;
+  std::ifstream features_testing(path_features_testing);
 
   std::vector<std::filesystem::path> testing_files;
   std::string temp_str, header, music_type, filename;
 
   std::getline(features_testing, header);
-
-  int count_hits = 0;
-  int total_read = 0;
-
   while (std::getline(features_testing, temp_str)) {
     std::vector<double> feature_vector;
 
@@ -36,11 +63,14 @@ int main() {
 
     music_type.pop_back();
     music_type.erase(0,2);
+  #endif
 
     std::string prediction = cart_predict(feature_vector);
 
-//    std::cout << "Rad file -> " << filename << std::endl;
-//    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    #ifdef VERBOSE
+    std::cout << "Rad file -> " << filename << std::endl;
+    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    #endif
 
     if (!prediction.compare(music_type))
       count_hits += 1;
