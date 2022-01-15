@@ -161,18 +161,18 @@ In order to run the evaluation of the learning methods, it is necessary first to
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # build evaluation code
 mkdir -p build/eval
-cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF  # ON for using testing paths file
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF  # ON for using testing paths file, described bellow
 make -C build/eval
 #+end_src
 
 The features used for testing have already been computed in the Extraction module, and the necessary learned attributes from their training scripts. As said before, everything is stored in the =Data/= folder.
 
-If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of paths in [[./DATA/file_list_train.txt][DATA/file_list_train.txt]]. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if on. To use it:
+If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of music files paths in [[./DATA/file_list_train.txt][DATA/file_list_train.txt]]. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if left on. To use it:
 #+begin_src bash :tangle no :export code :results silent
 cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=ON
 #+end_src
 
-An executable is generated per method, with execution exemplified bellow:
+An executable is generated per method, an no extra arguments are required as everything extracted from specific files, with execution exemplified bellow:
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # CART evaluation
 ./build/eval/EVALUATION_CART
@@ -184,9 +184,9 @@ An executable is generated per method, with execution exemplified bellow:
 ./build/eval/EVALUATION_ANN
 #+end_src
 
-In practice, the codes related to the prediction using each algorithm is stored in their respective folder, and they are used for this statistical performance analysis defined withing the Evaluation module.
+Here, the codes related to the prediction using each algorithm is stored in their respective folder, and they are used for the statistical performance analysis defined within the Evaluation module.
 
-* Development
+* Implementation
 
 ** CART
 
@@ -197,7 +197,7 @@ In practice, the codes related to the prediction using each algorithm is stored 
 ** SVM
 The SVM algorithm was first tested on python using the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html][=linearSVC=]] function from /sklearn/, with accuracy values that did not match the ones informed by the professor with his feature set. With that in mind, the pipeline was changed so to use the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC][=SVC=]] function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
 
-The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation.
+The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation. In practice, a 45x512 matrix is traversed row-wise, computing the inner product with the feature vector, so to retrieve a value representing the division between the compared classes, where positive values represent a "win" for the first class of the pair, and the second class otherwise.
 
 The training script is located at [[./SVM/train_svm.py][SVM/train_svm.py]] and the prediction at [[./SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]].
 
@@ -206,11 +206,15 @@ The training script is located at [[./SVM/train_svm.py][SVM/train_svm.py]] and t
 *** Time complexity
 
 ** ANN
-The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with ReLU activation and 1 output layer with softmax activation, as the results may be interpreted a probability distribution and their sum should total 1.
+The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with [[https://keras.io/api/layers/activations/][ReLU activation]] and 1 output layer with [[https://www.tensorflow.org/api_docs/python/tf/nn/softmax][softmax activation]], as the results may be interpreted a probability distribution and their sum should total 1.
 
 The [[https://keras.io/api/optimizers/rmsprop/][RMSprop]] optimizer was added to the training of the model, balancing the step sizes according to the magnitude of the gradient during back-propagation. A normal [[https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy][sparse categorical cross entropy]] loss function was used, working with the type of data we have. The model was training with a validation split of 60/40.
 
-The training script is located at [[file:ANN/train_ann.py][train_ann.py]]
+For performing predictions of classes in C++, the feed-forward step was implemented for a network of arbitrary architecture, but limited to ReLU and softmax activation functions. A custom text file is generated from the training script in order to save the weights and biases, with information on how many layers there are, and each layer starting with information of its dimensions. Each layer is represented by a MxN matrix, where each of the M rows represent a neuron composed of N weights, matching the input.
+
+Recent additions to the C++17 and C++20 standards were used to make comprehension easier and more straightforward, those being [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform]], [[https://en.cppreference.com/w/cpp/algorithm/transform_reduce][transform_reduce]] and [[https://en.cppreference.com/w/cpp/algorithm/inner_product][inner_product]] methods, some also present in the SVM implementation.
+
+The training script is located at [[file:ANN/train_ann.py][ANN/train_ann.py]] and the prediction in [[file:ANN/prediction_ann.cpp][ANN/prediction_ann.cpp]].
 
 *** Space complexity
 
