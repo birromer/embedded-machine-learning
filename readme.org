@@ -90,7 +90,7 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 
 - =Evaluation/= :: Contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
 
-=setup.sh= and =evaluation.sh= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
+=[[file:setup.sh][setup.sh]]= and =[[file:eval.sh][eval.sh]]= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
 
 ** Requirements
 :PROPERTIES:
@@ -114,7 +114,7 @@ Only the needed module is compiled now, as some files needed for further buildin
 *** Feature extraction
 The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data.
 
-It outputs to the data folder the files =file_list_train.txt= and =file_list_test.txt=, with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
+It outputs to the data folder the files =[[file:DATA/file_list_train.txt][file_list_train.txt]]= and =[[file:DATA/file_list_test.txt][file_list_test.txt]]=, with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
 
 The features are extracted to the files =features_training.csv= and =features_testing.csv=. They correspond to the aforementioned data and are already computed to avoid repeated calls.
 
@@ -199,22 +199,24 @@ The SVM algorithm was first tested on python using the [[https://scikit-learn.or
 
 The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation.
 
-The training script is located at =SVM/train_svm.py= and the prediction at =SVM/musical_types_svm.cpp=.
+The training script is located at =[[file:SVM/train_svm.py][SVM/train_svm.py]]= and the prediction at =[[file:SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]]=.
 
 *** Space complexity
 
 *** Time complexity
 
 ** ANN
-The training part of the implementation was done in Python using the Tensorflow library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with a ReLU activation and 1 output layer with softmax activation, as the results may be interpreted a probability distribution and their sum should total 1.
+The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with ReLU activation and 1 output layer with softmax activation, as the results may be interpreted a probability distribution and their sum should total 1.
 
+The [[https://keras.io/api/optimizers/rmsprop/][RMSprop]] optimizer was added to the training of the model, balancing the step sizes according to the magnitude of the gradient during back-propagation. A normal [[https://www.tensorflow.org/api_docs/python/tf/keras/losses/SparseCategoricalCrossentropy][sparse categorical cross entropy]] loss function was used, working with the type of data we have. The model was training with a validation split of 60/40.
 
+The training script is located at
 
 *** Space complexity
 
 *** Time complexity
 
-* Results
+* Results and Analysis
 :PROPERTIES:
 :CUSTOM_ID: sec.results
 :END:
