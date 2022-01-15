@@ -90,7 +90,7 @@ Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a t
 
 - =Evaluation/= :: Contains programs that measure the accuracy, execution time and memory usage of the algorithms. They are invoked individually for each classifier.
 
-=[[file:setup.sh][setup.sh]]= and =[[file:eval.sh][eval.sh]]= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
+=[[setup.sh][setup.sh]]= and =[[eval.sh][eval.sh]]= are the tangled snippets presented in this file, with everything up to model training in the former, and the performance evaluation in the latter.
 
 ** Requirements
 :PROPERTIES:
@@ -114,9 +114,9 @@ Only the needed module is compiled now, as some files needed for further buildin
 *** Feature extraction
 The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data.
 
-It outputs to the data folder the files =[[file:DATA/file_list_train.txt][file_list_train.txt]]= and =[[file:DATA/file_list_test.txt][file_list_test.txt]]=, with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
+It outputs to the data folder the files =[[DATA/file_list_train.txt][file_list_train.txt]]= and =[[DATA/file_list_test.txt][file_list_test.txt]]=, with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
 
-The features are extracted to the files =features_training.csv= and =features_testing.csv=. They correspond to the aforementioned data and are already computed to avoid repeated calls.
+The features are extracted to the files =[[DATA/features_training.csv][features_training.csv]]= and =[[DATA/features_testing.csv][features_testing.csv]]=. They correspond to the aforementioned data and are already computed to avoid repeated calls.
 
 Having the project built, the extraction can be executed with the following command:
 
@@ -133,7 +133,7 @@ In order to use the CART algorithm, you must first build the classification tree
 python3 CART/train_cart.py
 #+end_src
 
-This will generate the file =CART/music_styles_cart.cpp=, with a function corresponding to a sequence of if/else's analog to the trained binary tree paths.
+This will generate the file =[[CART/prediction_cart.cpp][CART/prediction_cart.cpp]]=, with a function corresponding to a sequence of if/else's analog to the trained binary tree paths.
 
 *** SVM
 So to use the SVM model, we must first also execute the related Python script:
@@ -143,7 +143,7 @@ So to use the SVM model, we must first also execute the related Python script:
 python3 SVM/train_svm.py
 #+end_src
 
-This will generate the files =DATA/svm_coeff.csv=, with the weights and bias for the hyperplanes in the model, and =DATA/svm_feat_Stats.csv=, with the statistical attributes of the features used in training, so that it can be replicated during prediction.
+This will generate the files =[[DATA/svm_coeff.csv][DATA/svm_coeff.csv]]=, with the weights and bias for the hyperplanes in the model, and =[[DATA/svm_feat_stats.csv][DATA/svm_feat_stats.csv]]=, with the statistical attributes of the features used in training, so that it can be replicated during prediction.
 
 *** ANN
 The usage of the ANN method requires first the training of the associated neural network, also specified in a Python script:
@@ -167,7 +167,7 @@ make -C build/eval
 
 The features used for testing have already been computed in the Extraction module, and the necessary learned attributes from their training scripts. As said before, everything is stored in the =Data/= folder.
 
-If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of paths in =DATA/file_list_train.txt=. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if on. To use it:
+If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of paths in =[[DATA/file_list_train.txt][DATA/file_list_train.txt]]=. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if on. To use it:
 #+begin_src bash :tangle no :export code :results silent
 cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=ON
 #+end_src
@@ -199,7 +199,7 @@ The SVM algorithm was first tested on python using the [[https://scikit-learn.or
 
 The interpretation of the coefficients for predicting the classes from new data in C++ had to change as well, as they represent the plans dividing the results in 1 vs 1 duels withing all classes, in a total of 45. This is better explained in the [[https://scikit-learn.org/stable/modules/svm.html#multi-class-classification][multi-class classification section]] of its documentation.
 
-The training script is located at =[[file:SVM/train_svm.py][SVM/train_svm.py]]= and the prediction at =[[file:SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]]=.
+The training script is located at =[[SVM/train_svm.py][SVM/train_svm.py]]= and the prediction at =[[SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]]=.
 
 *** Space complexity
 
