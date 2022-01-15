@@ -49,9 +49,9 @@ int main() {
 
     int prediction = ann_predict(feature_vector, ann_model);
 
-    std::cout << "Read file -> " << filename << std::endl;
-    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
-    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+//    std::cout << "Read file -> " << filename << std::endl;
+//    std::cout << "Music type: " << music_style_from_string(music_type) << " | Prediction: " << music_style_from_int(prediction);
+//    std::cout << " --> " << (music_style_from_int(prediction) == music_style_from_string(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
 
     if (music_style_from_int(prediction) == music_style_from_string(music_type))
       count_hits += 1;

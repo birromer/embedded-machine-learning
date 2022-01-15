@@ -37,6 +37,8 @@ std::vector<std::vector<std::vector<double>>> load_ann_model() {
     std::getline(ss, tmp_val, '\n');
     n_cols = std::stoi(tmp_val);
 
+//    std::cout << "Reading layer " << l << ", with " << n_rows << " rows and " << n_cols << " cols." << std::endl;
+
     std::vector<std::vector<double>> neuron;
 
     for (int i=0; i<n_rows; i++) {
@@ -44,31 +46,20 @@ std::vector<std::vector<std::vector<double>>> load_ann_model() {
       std::stringstream ss(tmp_line);
 
       std::vector<double> row;
-      std::cout << "row: " << i << std::endl;
+//      std::cout << "row: " << i << std::endl;
 
       for (int j=0; j<n_cols; j++) {
 
         std::getline(ss, tmp_val, ',');
-        std::cout << "col: " << j << " | tmp_val: " << tmp_val << std::endl;
+//        std::cout << "col: " << j << " | tmp_val: " << tmp_val << std::endl;
         row.push_back(std::stod(tmp_val));
+
       }
 
       neuron.push_back(row);
     }
 
     layers.push_back(neuron);
-  }
-
-
-  for (std::vector<std::vector<double>> layer : layers) {
-    std::cout << "new layer: " << std::endl;
-    for (std::vector<double> neuron : layer) {
-      std::cout << "another neuron: " << std::endl;
-        for (double weight : neuron) {
-          std::cout << weight << " ";
-        }
-        std::cout << std::endl;
-    }
   }
 
   return layers;
@@ -101,9 +92,10 @@ std::vector<double> softmax(std::vector<double> input) {
     [] (double x) {return exp(x);}  // transform
   );
 
-  std::transform(input.cbegin(), input.cend(),
-                 please_give_me_clean_lambdas.begin(),
-                 [&] (double x) {return exp(x)/reduce_sum;}  // i really dislike functional c++
+  std::transform(
+    input.cbegin(), input.cend(),
+    please_give_me_clean_lambdas.begin(),
+    [&] (double x) {return exp(x)/reduce_sum;}  // i really dislike functional c++
   );
 
   return please_give_me_clean_lambdas;
