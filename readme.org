@@ -143,7 +143,7 @@ So to use the SVM model, we must first also execute the related Python script:
 python3 SVM/train_svm.py
 #+end_src
 
-This will generate the files [[./DATA/svm_coeff.csv][DATA/svm_coeff.csv]], with the weights and bias for the hyperplanes in the model, and [[./DATA/svm_feat_stats.csv][DATA/svm_feat_stats.csv]], with the statistical attributes of the features used in training, so that it can be replicated during prediction.
+This will generate the files [[./DATA/svm_coeff.csv][DATA/svm_coeff.csv]], with the weights and bias for the hyperplanes in the model, and [[./DATA/svm_feat_stats.csv][DATA/svm_feat_stats.csv]], with the statistical attributes of the features used in training, so that it can be replicated during prediction of new data.
 
 *** ANN
 The usage of the ANN method requires first the training of the associated neural network, also specified in a Python script:
@@ -153,7 +153,7 @@ The usage of the ANN method requires first the training of the associated neural
 python3 ANN/train_ann.py
 #+end_src
 
-<COMPLETE WITH OUTPUT WEIGHTS FILE>
+This will generate the file [[file:DATA/ann_weights.txt][DATA/ann_weights.txt]], with the weights and bias for all layers of the trained model.
 
 *** Evaluation
 In order to run the evaluation of the learning methods, it is necessary first to compile the Evaluation module, as in the following block:
@@ -189,6 +189,9 @@ Here, the codes related to the prediction using each algorithm is stored in thei
 * Implementation
 
 ** CART
+The generation of the CART profits from the implementation made available from the original repository, having it only to be adapted for the already split data and some testing was done with varying max depths. Some problems were encountered in its usage from failing expansion of the nodes, with invalid thresholds, but we could not find the source of the problem. Sometimes the training fails with a TypeError, but with repeated executions it works.
+
+The main addition was the C++ code generation from the learned tree, were a recursive depth-first exploration generates conditionals that replicate the paths in code. The generated file is called [[file:SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]], and has a function that retrieves a literal string with the class from a given feature vector.
 
 *** Space complexity
 
