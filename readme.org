@@ -194,11 +194,12 @@ The generation of the CART profits from the [[file:CART/CART.py][implementation]
 The main addition was the C++ code generation from the learned tree, were a recursive depth-first exploration generates conditionals that replicate the paths in code. The generated file is called [[file:SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]], and has a function that retrieves a literal string with the class from a given feature vector.
 
 *** Time complexity
-During training, considering /n/ as the number of dimensions in a feature and /m/ as the number data elements in the l
+During training, considering /d/ as the number of dimensions in a feature and /n/ as the number data elements used, we can notice that each feature requires to have all of its dimensions analyzed for information gain and every insertion has to walk a path in the tree, which is a logarithm of the number of elements in it. With this, we can say that in order to create a CART from /n/ data it will constitute something close to $O(n*d*log(n))$.
 
-During prediction, considering /d/ as the depth of the learned binary tree, nothing but its transversal is performed, which corresponds to $O(log(d))$ complexity. /d/ is a bounded constant specified before training.
+During prediction, nothing but the transversal of a binary tree is performed, which corresponds to $O(log(d))$ complexity. In fact, the complexity should be in terms of the size of the tree, taking a balanced binary tree of /n/ nodes, and it is assumed here that there is a linear connection to the nodes and the number of dimensions.
 
 *** Space complexity
+The memory used for creating the CART corresponds to a single copy of the nodes of the tree built so far, being linear with respect to the number of nodes.
 
 ** SVM
 The SVM algorithm was first tested on python using the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html][=linearSVC=]] function from /sklearn/, with accuracy values that did not match the ones informed by the professor with his feature set. With that in mind, the pipeline was changed so to use the [[https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC][=SVC=]] function with a linear kernel, consistently providing accuracy values over 10% higher (around 64%, better shown in #sec.results).
@@ -208,11 +209,12 @@ The interpretation of the coefficients for predicting the classes from new data 
 The training script is located at [[./SVM/train_svm.py][SVM/train_svm.py]] and the prediction at [[./SVM/prediction_svm.cpp][SVM/prediction_svm.cpp]].
 
 *** Time complexity
-For training, taking /n/ as the number of dimensions in a feature and /m/ as the number of data elements,
+For training, taking /d/ as the number of dimensions in a feature and /n/ as the number of data elements, when dealing with a quadratic programming problem, the complexity will be of $O(n * d^2)$. This is the core of the solver and other complexities disappear when dealing with the worst case.
 
-For predicting, now considering /c/ as the number of classes, the result will come from processing Y in $Y = A \times X + B$, where A is a matrix of $(c * (c-1)/2$ rows and /n/ columns with the learned SVM coefficients, and B vector of size /c/ with the bias. Being a single threaded application, $O(c m)$ approximates the execution of its two nested loops, ignoring the "processing" part of Y as it's linear to the size of Y (a.k.a. number of rows in A)
+For predicting, now considering /c/ as the number of classes and $r = (c * (c-1)/2$ the number of duels performed, the result will come from processing Y in $Y = A \times X + B$, where A is a matrix of /r/ rows and /d/ columns with the learned SVM coefficients, and B vector of size /r/ storing the bias. Being a single threaded application, $O(c * r * n)$ approximates the execution of its two nested loops for /n/ data, ignoring the "processing" part of Y as it's linear to the size of Y (a.k.a. number of rows in A)
 
 *** Space complexity
+In terms of memory usage, it should require only the ensemble of features in their entirety, meaning that it would occupy a space proportional to $d * n$.
 
 ** ANN
 The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with [[https://keras.io/api/layers/activations/][ReLU activation]] and 1 output layer with [[https://www.tensorflow.org/api_docs/python/tf/nn/softmax][softmax activation]], as the results may be interpreted a probability distribution and their sum should total 1.
@@ -226,11 +228,14 @@ Recent additions to the C++17 and C++20 standards were used to make comprehensio
 The training script is located at [[file:ANN/train_ann.py][ANN/train_ann.py]] and the prediction in [[file:ANN/prediction_ann.cpp][ANN/prediction_ann.cpp]].
 
 *** Time complexity
-For computing the complexity during training, we'll consider /n/ as the number of dimensions in a feature, /m/ as the number of data elements, /l/ as the number of layers, /n_i/ as the number of neurons in the layer i.
+For computing the complexity during training, we'll consider /n/ as the number of dimensions in a feature, /m/ as the number of data elements, /l/ as the number of layers, /n_i/ as the number of neurons in the layer i. For arriving at the complexity we'll consider the two main steps: feed-forward and back propagation. For the testing step, it will correspond to the worst case between the two, only the first one for the prediction step.
 
-When predicting classes, each feature vector of size /n/ will lead to /l/ matrix multiplications, always between matrices of shape /n_{i-2}/ x /n_{i-1} and /n_{i-1}/ x /n_{i}/, where i in {0..l}. This means that operations of n^3 time complexity will be performed /l/ times, with an added bias addition that can be ignored for notation. Between layers, either a softmax or ReLU activation is applied, but those are linear to their input and will disappear in worst case, leading to $O(l * n^3)$ complexity.
+When performing the feed-forward, so to generate a class prediction, each feature vector of size /n/ will lead to /l/ matrix multiplications, always between matrices of shape /n_{i-2}/ x /n_{i-1}/ and /n_{i-1}/ x /n_{i}/, where i in {0..l}. This means that operations of n^3 time complexity will be performed /l/ times, with an added bias addition that can be ignored for notation. Between layers, either a softmax or ReLU activation is applied, but those are linear to their input and will disappear in worst case, leading to $O(l * n^3)$ complexity.
+
+The back-propagation will be composed of
 
 *** Space complexity
+
 
 * Results and Analysis
 :PROPERTIES:
