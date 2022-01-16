@@ -4,35 +4,42 @@
 #include <fstream>
 #include <filesystem>
 #include "../Helpers/globals.h"
+#include "../Helpers/print_helpers.h"
 #include "../Extraction/features_extraction.h"
+#include "../Helpers/music_style_helpers.h"
 #include "../CART/prediction_cart.cpp"
 
+using namespace std;
+
 // File containing the path of all testing files
-const std::string path_list_test = "./DATA/file_list_test.txt";
+const string path_list_test = "./DATA/file_list_test.txt";
 
 // Extracted features of the testing files
-std::string path_features_testing = "./DATA/features_testing.csv";
+string path_features_testing = "./DATA/features_testing.csv";
 
 int main() {
   int count_hits = 0;
   int total_read = 0;
 
+  // each line is a known class, each column is the predictions that should have been the same as the line
+  vector<vector<int>> confusion_matrix(CLASS_N, vector<int>(CLASS_N, 0));
+
   #ifdef USE_TESTS_FILE
-  std::cout << std::endl << "Extracting features from paths in file: " << path_list_test << std::endl;
+  cout << endl << "Extracting features from paths in file: " << path_list_test << endl;
 
-  std::ifstream paths_testing_files(path_list_test);
-  std::vector<std::filesystem::path> testing_files;
-  std::string temp_str;
+  ifstream paths_testing_files(path_list_test);
+  vector<filesystem::path> testing_files;
+  string temp_str;
 
-  while (std::getline(paths_testing_files, temp_str)) {
+  while (getline(paths_testing_files, temp_str)) {
     testing_files.push_back(temp_str);
   }
 
   auto all_features = compute_set_of_features(testing_files, path_features_testing, false);
 
   for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
-    std::string music_type = it->first.parent_path().filename();
-    std::vector<double> feature_vector;
+    string music_type = it->first.parent_path().filename();
+    vector<double> feature_vector;
 
     for (auto const &entry: it->second)
        for (auto elem: entry.second)
@@ -40,45 +47,65 @@ int main() {
   #endif
 
   #ifndef USE_TESTS_FILE
-  std::cout << std::endl << "Using extracted testing features:" << path_features_testing << std::endl;
-  std::ifstream features_testing(path_features_testing);
+  cout << endl << "Using extracted testing features:" << path_features_testing << endl;
+  ifstream features_testing(path_features_testing);
 
-  std::vector<std::filesystem::path> testing_files;
-  std::string temp_str, header, music_type, filename;
+  vector<filesystem::path> testing_files;
+  string temp_str, header, music_type, filename;
 
-  std::getline(features_testing, header);
-  while (std::getline(features_testing, temp_str)) {
-    std::vector<double> feature_vector;
+  getline(features_testing, header);
+  while (getline(features_testing, temp_str)) {
+    vector<double> feature_vector;
 
-    std::stringstream ss(temp_str);
-    std::string feat_val;
+    stringstream ss(temp_str);
+    string feat_val;
 
-    for (std::size_t i=0; i<N; i++) {
-      std::getline(ss, feat_val, ',');
-      feature_vector.push_back(std::stod(feat_val));
+    for (size_t i=0; i<N; i++) {
+      getline(ss, feat_val, ',');
+      feature_vector.push_back(stod(feat_val));
     }
 
-    std::getline(ss, music_type, ',');
-    std::getline(ss, filename, ',');
+    getline(ss, music_type, ',');
+    getline(ss, filename, ',');
 
     music_type.pop_back();
     music_type.erase(0,2);
   #endif
 
-    std::string prediction = cart_predict(feature_vector);
+    string prediction = cart_predict(feature_vector);
+
+    MUSIC_STYLE pred = music_style_from_string(prediction);
+    MUSIC_STYLE truth = music_style_from_string(music_type);
 
     #ifdef VERBOSE
-    std::cout << "Rad file -> " << filename << std::endl;
-    std::cout << "Music type: " << music_type << " | Prediction: " << prediction << " --> " << (!prediction.compare(music_type) ? "Correct" : "Wrong") << std::endl << std::endl;
+    cout << "Rad file -> " << filename << endl;
+    cout << "Music type: " << music_type << " | Prediction: " << prediction;
+    cout << " --> " << (pred == truth ? "Correct" : "Wrong") << endl << endl;
     #endif
 
-    if (!prediction.compare(music_type))
+    if (pred == truth)
       count_hits += 1;
+
+    confusion_matrix[(int)truth][(int)pred] += 1;
 
     total_read += 1;
   }
 
-  std::cout << "CART accuracy: " << (float) count_hits / (float) total_read << std::endl;
+  cout << "CART accuracy: " << (float) count_hits / (float) total_read << endl;
+  cout << "Confusion matrix:" << endl;
+
+  #ifdef VERBOSE
+  print_confusion_matrix(confusion_matrix);
+  #endif
+
+  #ifndef VERBOSE
+  for (vector<int> known_class : confusion_matrix) {
+    for (int hits : known_class) {
+      cout << setfill(' ') << setw(3) << hits;
+    }
+    cout << endl;
+  }
+  #endif
 
   return 0;
 }

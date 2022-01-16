@@ -1,6 +1,6 @@
 # build evaluation code
 mkdir -p build/eval
-cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF  # ON for using testing paths file
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF -DVERBOSE=OFF
 make -C build/eval
 
 # CART evaluation

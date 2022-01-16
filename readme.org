@@ -112,7 +112,7 @@ make -C build/setup                 # or . for the entire project
 Only the needed module is compiled now, as some files needed for further building the modules are generated in the following steps. An example is CART, which will only have its prediction tree after the training done in Python.
 
 *** Feature extraction
-The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data.
+The extraction of features from the audio files must happen before the training steps. In our case we'll be using only the dataset, which is split into training and testing data. This process takes around 70 in the tested machines.
 
 It outputs to the data folder the files [[./DATA/file_list_train.txt][file_list_train.txt]] and [[./DATA/file_list_test.txt][file_list_test.txt]], with the file paths for training and testing. The testing one is the input for the evaluation binaries, if no other is provided.
 
@@ -161,7 +161,7 @@ In order to run the evaluation of the learning methods, it is necessary first to
 #+begin_src bash :tangle "eval.sh" :export code :results silent
 # build evaluation code
 mkdir -p build/eval
-cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF  # ON for using testing paths file, described bellow
+cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=OFF -DVERBOSE=OFF
 make -C build/eval
 #+end_src
 
@@ -171,6 +171,25 @@ If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so t
 #+begin_src bash :tangle no :export code :results silent
 cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=ON
 #+end_src
+
+The *VERBOSE* compilation variable was also added to increase the information in stdout during evaluation. Most notably, it will add specify what is being processed in the various steps of the methods, and during evaluation will print a labeled confusion matrix instead of plain numbers, such as bellow.
+
+#+begin_exampUsing extracted testing features:./DATA/features_testing.csv
+SVM accuracy: 0.603333
+Confusion matrix:
+               blues classical   country     disco    hiphop      jazz     metal       pop    reggae      rock
+     blues        17         0         4         2         0         1         2         0         3         1
+ classical         0        28         0         1         0         1         0         0         0         0
+   country         3         1        13         3         0         1         2         0         0         7
+     disco         0         0         3        12         5         0         1         2         5         2
+    hiphop         2         0         2         3        17         0         3         1         2         0
+      jazz         3         2         0         0         0        24         0         0         1         0
+     metal         1         0         0         2         1         0        24         0         0         2
+       pop         1         0         4         0         3         0         0        21         1         0
+    reggae         2         0         2         2         4         0         3         3        14         0
+      rock         2         1         5         1         0         2         5         2         1        11
+#+end_example
+
 
 An executable is generated per method, an no extra arguments are required as everything extracted from specific files, with execution exemplified bellow:
 #+begin_src bash :tangle "eval.sh" :export code :results silent
@@ -214,7 +233,7 @@ For training, taking /d/ as the number of dimensions in a feature and /n/ as the
 For predicting, now considering /c/ as the number of classes and $r = (c * (c-1)/2$ the number of duels performed, the result will come from processing Y in $Y = A \times X + B$, where A is a matrix of /r/ rows and /d/ columns with the learned SVM coefficients, and B vector of size /r/ storing the bias. Being a single threaded application, $O(c * r * n)$ approximates the execution of its two nested loops for /n/ data, ignoring the "processing" part of Y as it's linear to the size of Y (a.k.a. number of rows in A)
 
 *** Space complexity
-In terms of memory usage, it should require only the ensemble of features in their entirety, meaning that it would occupy a space proportional to $d * n$.
+In terms of memory usage, it should require only the ensemble of features loaded, meaning that it would occupy a space proportional to $d * n$.
 
 ** ANN
 The training part of the implementation was done in Python using the /Tensorflow/ library, as mentioned in #sec.requirements. Here, a 3 layered neural network was built using 2 dense layers with [[https://keras.io/api/layers/activations/][ReLU activation]] and 1 output layer with [[https://www.tensorflow.org/api_docs/python/tf/nn/softmax][softmax activation]], as the results may be interpreted a probability distribution and their sum should total 1.
@@ -237,9 +256,7 @@ The back-propagation complexity can be obtained with similar reasoning, arriving
 *** Space complexity
 During execution, only the active layers being processed need to remain in memory, as well as the feature vector input, arriving at a memory consumption relative to the size of the layers and how many connections there are. Dense layers will use the most space, for they have the maximum number of connections between neurons and previous outputs, but still in the order of $n_{i-2} x n_{i-1} \text{and} n_{i-1} x n_{i}$,
 
-
-
-* Results and Analysis
+* Results
 :PROPERTIES:
 :CUSTOM_ID: sec.results
 :END:
