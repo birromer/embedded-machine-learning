@@ -269,7 +269,6 @@ Executing each of the evaluation programs we can see the following results:
 sh ./eval.sh
 #+end_src
 
-#+RESULTS:
 #+begin_example
 CART accuracy: 0.47
 Confusion matrix:
