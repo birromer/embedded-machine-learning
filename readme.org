@@ -232,9 +232,11 @@ For computing the complexity during training, we'll consider /n/ as the number o
 
 When performing the feed-forward, so to generate a class prediction, each feature vector of size /n/ will lead to /l/ matrix multiplications, always between matrices of shape /n_{i-2}/ x /n_{i-1}/ and /n_{i-1}/ x /n_{i}/, where i in {0..l}. This means that operations of n^3 time complexity will be performed /l/ times, with an added bias addition that can be ignored for notation. Between layers, either a softmax or ReLU activation is applied, but those are linear to their input and will disappear in worst case, leading to $O(l * n^3)$ complexity.
 
-The back-propagation will be composed of
+The back-propagation complexity can be obtained with similar reasoning, arriving at something similar to $O(l * n^3)$. As this step happens in sequence of the training, their sum will have the same order of magnitude and so will their time complexities.
 
 *** Space complexity
+During execution, only the active layers being processed need to remain in memory, as well as the feature vector input, arriving at a memory consumption relative to the size of the layers and how many connections there are. Dense layers will use the most space, for they have the maximum number of connections between neurons and previous outputs, but still in the order of $n_{i-2} x n_{i-1} \text{and} n_{i-1} x n_{i}$,
+
 
 
 * Results and Analysis
