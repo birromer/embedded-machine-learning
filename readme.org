@@ -174,7 +174,8 @@ cmake -S Evaluation -B build/eval -DUSE_TESTS_FILE=ON
 
 The *VERBOSE* compilation variable was also added to increase the information in stdout during evaluation. Most notably, it will add specify what is being processed in the various steps of the methods, and during evaluation will print a labeled confusion matrix instead of plain numbers, such as bellow.
 
-#+begin_exampUsing extracted testing features:./DATA/features_testing.csv
+#+begin_example
+Using extracted testing features:./DATA/features_testing.csv
 SVM accuracy: 0.603333
 Confusion matrix:
                blues classical   country     disco    hiphop      jazz     metal       pop    reggae      rock
