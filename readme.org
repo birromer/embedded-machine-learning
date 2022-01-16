@@ -169,11 +169,9 @@ The features used for testing have already been computed in the Extraction modul
 
 If desired, it is possible to use the compilation variable *USE_TESTS_FILE* so to ignore the extracted features and extract them from a list of music files paths in [[./DATA/file_list_train.txt][DATA/file_list_train.txt]]. This file is also redundantly computed during extraction, matching the separation of training and testing datasets, so if no modification in done they should both provide the same results, it will just take longer if left on.
 
-The *VERBOSE* compilation variable was also added to increase the information in stdout during evaluation. Most notably, it will add specify what is being processed in the various steps of the methods, and during evaluation will print a labeled confusion matrix instead of plain numbers, such as bellow.
+The *VERBOSE* compilation variable was also added to increase the information in stdout during evaluation. Most notably, it will add specify what is being processed in the various steps of the methods, and during evaluation will print a labeled confusion matrix instead of plain numbers (added in [[file:Helpers/print_helpers.h][Helpers/print_helpers.h]]), such as bellow.
 
 #+begin_example
-Using extracted testing features:./DATA/features_testing.csv
-SVM accuracy: 0.603333
 Confusion matrix:
                blues classical   country     disco    hiphop      jazz     metal       pop    reggae      rock
      blues        17         0         4         2         0         1         2         0         3         1
@@ -265,7 +263,7 @@ During execution, only the active layers being processed need to remain in memor
 
 Executing each of the evaluation programs we can see the following results:
 
-#+begin_src bash :tangle no :export result :results verbatim
+#+begin_src bash :tangle no :export none :results verbatim
 sh ./eval.sh
 #+end_src
 
