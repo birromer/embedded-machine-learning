@@ -8,6 +8,9 @@ import numpy as np
 import pandas as pd
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 input_shape = (512, 1)
 nb_classes = 10
@@ -17,6 +20,7 @@ DATA_DIR = "./DATA"
 FEAT_TRAIN_FILE = "features_training.csv"
 FEAT_TEST_FILE = "features_testing.csv"
 ANN_WEIGHTS_FILE = "ann_weights.txt"
+ANN_STATS_FILE = "ann_stats.txt"
 
 def learningCurves(history,title):
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
@@ -67,34 +71,54 @@ def model_generator(X):
 
 
 if __name__ == "__main__":
-    X_train, Y_train, classes = load_data(FEAT_TRAIN_FILE)  # features, label, vector of the classes
-    X_test, Y_test, _ = load_data(FEAT_TEST_FILE)
 
+    #splitting train, test and classes
+    X_test, Y_test, classes = load_data(FEAT_TEST_FILE)  # features, label, vector of the classes
+
+    scaler = StandardScaler()
+    scaler.fit(X_test)
+
+    X_train, Y_train, _ = load_data(FEAT_TRAIN_FILE)
+    X_train, X_val, Y_train, Y_val = train_test_split(X_train, Y_train, test_size=0.25)
+
+    #labels
     unq, tags = np.unique(Y_train, return_inverse=True)
     Y_train = tags
-
     unq, tags = np.unique(Y_test, return_inverse=True)
     Y_test = tags
+    unq, tags = np.unique(Y_val, return_inverse=True)
+    Y_val = tags
 
-    #Y = encName2Ind.transform(Y)
-    print(Y_train)
+    # Normalisation
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)  # learn the mean and var from training set
+    X_val = scaler.transform(X_val)          # and apply to the other ones
+    X_test = scaler.transform(X_test)
 
-    #ds_train = tf.data.Dataset.from_tensor_slices((X, Y))
+    # defining model
+    model = keras.models.Sequential([
+        keras.layers.Dense(units=256, activation='relu', input_dim=X_train.shape[1]), # kernel_regularizer=tf.keras.regularizers.L2(l2=0.5)),
+        keras.layers.Dense(units=64, activation='relu'),
+        keras.layers.Dense(units=32, activation='relu'),
+        keras.layers.Dense(units=10, activation='softmax')])
+#    model = model_generator(X_train)
 
-    model = model_generator(X_train)
-    model.summary()
-
-    #optimizer = keras.optimizers.SGD(learning_rate=0.001, momentum=0.9, decay=0.01)
-    optimizer = keras.optimizers.RMSprop(0.0001)
+    optimizer = keras.optimizers.Adam(learning_rate=0.0001)
 
     model.compile(loss="sparse_categorical_crossentropy",
-                  optimizer=optimizer,
-                  metrics=["accuracy"]
-                  )
+                  optimizer=optimizer, metrics=["accuracy"])
 
-    history = model.fit(X_train, Y_train, epochs=nb_epochs, validation_split=0.4)
+    history = model.fit(X_train, Y_train, validation_data=(X_val, Y_val), epochs=100)
 
+    # evaluation
+    result = model.evaluate(x=X_test, y=Y_test)
+
+    # architecture
+    model.summary()
+
+    # curves
     learningCurves(history.history, "learning curves")
+    plt.show()
 
     # confusion matrix result
     predictions = model.predict(X_test)
@@ -105,7 +129,6 @@ if __name__ == "__main__":
     print("predictions:", predictions[:5].argmax(axis=1))
     print("Y_test:", Y_test[:5])
     print("Accuracy:", float(np.sum(predictions.argmax(axis=1) == Y_test))/len(Y_test))
-
 
     print("Generating weights file")
     with open(os.path.join(DATA_DIR, ANN_WEIGHTS_FILE), "w+") as f_ann:
@@ -127,5 +150,17 @@ if __name__ == "__main__":
                 # store the matrix line by line
                 line = ",".join(map(str,w)) + ",{}\n".format(bias[i])
                 f_ann.write(line)
+
+    print("Generating normalization stats file")
+    with open(os.path.join(DATA_DIR, ANN_STATS_FILE), "w+") as f_stats:
+        mean, stddev = scaler.mean_, scaler.scale_
+        mean = mean.reshape((len(mean),1))
+        stddev = stddev.reshape((len(stddev),1))
+        header = ['AVG{}'.format(i) for i in range(len(mean)+1)] + ['STDDEV{}'.format(i) for i in range(len(stddev)+1)]
+
+        print("mean shape", mean.shape)
+        print("stddev shape", stddev.shape)
+
+        np.savetxt(f_stats, np.concatenate((mean,stddev), axis=0).T, header=','.join(header), delimiter=',', comments='')
 
     print("Finished saving model")

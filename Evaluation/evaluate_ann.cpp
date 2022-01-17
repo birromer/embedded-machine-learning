@@ -21,6 +21,7 @@ string path_features_testing = "./DATA/features_testing.csv";
 int main() {
   // load weights and biases for all layers in the neural network
   vector<vector<vector<double>>> ann_model = load_ann_model();
+  vector<vector<double>> ann_stats = load_ann_stats();
 
   int count_hits = 0;
   int total_read = 0;
@@ -85,6 +86,8 @@ int main() {
     music_type.pop_back();
     music_type.erase(0,2);
     #endif
+
+    feature_vector = normalize(feature_vector, ann_stats[0], ann_stats[1]);
 
     int prediction = ann_predict(feature_vector, ann_model);
 

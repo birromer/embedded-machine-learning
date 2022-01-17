@@ -11,6 +11,7 @@
 
 // Learned ANN weights
 const std::string path_ann_weights = "./DATA/ann_weights.txt";
+const std::string path_ann_stats = "./DATA/ann_stats.txt";
 
 #define N_CLASSES 10
 
@@ -25,7 +26,7 @@ std::vector<std::vector<std::vector<double>>> load_ann_model() {
   std::getline(weights_file, tmp_line);
   n_layers = std::stoi(tmp_line);  // get number of layers in the file
 
-  std::vector<std::vector<std::vector<double>>> layers;  // where all 1v1 classifies are stored
+  std::vector<std::vector<std::vector<double>>> layers;
 
   for (int l=0; l<n_layers; l++) {
     std::getline(weights_file, tmp_line);
@@ -65,6 +66,42 @@ std::vector<std::vector<std::vector<double>>> load_ann_model() {
   return layers;
 }
 
+
+// output is a vector of two vectors, with the stats for
+// normalization,  the first is the mean of each feature
+// the second is their scale (stddev)
+std::vector<std::vector<double>> load_ann_stats() {
+  std::ifstream stats_file(path_ann_stats);
+
+  std::string tmp_line, tmp_val, bias;
+
+  std::getline(stats_file, tmp_line);  // ignor the header
+
+  std::vector<std::vector<double>> stats;  // where all stats are stored
+
+  std::vector<double> means, stddevs;
+
+  std::getline(stats_file, tmp_line);
+
+  std::stringstream ss(tmp_line);
+
+  for (std::size_t l=0; l<FEAT_N; l++) {  // iterate over the 512 means
+    std::getline(ss, tmp_val, ',');
+    means.push_back(std::stod(tmp_val));
+  }
+
+  for (std::size_t l=0; l<FEAT_N; l++) {  // iterate over the 512 scales
+    std::getline(ss, tmp_val, ',');
+    stddevs.push_back(std::stod(tmp_val));
+  }
+
+  stats.push_back(means);
+  stats.push_back(stddevs);
+
+  return stats;
+}
+
+
 // input: column vector with the computed output of each neuron of the layer
 // output: column vector with relu function mapped to each dimension of the input
 std::vector<double> relu(std::vector<double> input) {
@@ -101,15 +138,25 @@ std::vector<double> softmax(std::vector<double> input) {
   return please_give_me_clean_lambdas;
 }
 
+std::vector<double> normalize(std::vector<double> input, std::vector<double> mean, std::vector<double> stddev) {
+  std::vector<double> once_upon_a_time_we_used_haskell(input.size(), 0);
+
+  for (std::size_t i=0; i<input.size(); i++) {
+    once_upon_a_time_we_used_haskell[i] = (input[i] - mean[i])/sqrt(stddev[i]);
+  }
+
+  return once_upon_a_time_we_used_haskell;
+}
+
 int ann_predict(std::vector<double> feat_vec, std::vector<std::vector<std::vector<double>>> layers) {
 
   // apply the feed forward through the layers
   std::vector<double> input(feat_vec.begin(), feat_vec.end());
 
-  for (std::vector<std::vector<double>> layer : layers) {
+  for (auto it = layers.begin(); it != layers.end(); it++) {
     std::vector<double> Y_layer;
 
-    for (std::vector<double> neuron : layer) {
+    for (std::vector<double> neuron : *it) {
       // matrix multiplication, line by line, base value of the sum being the bias
       double y_n = std::inner_product(input.begin(), input.end(), neuron.begin(), *(neuron.end()-1));
       Y_layer.push_back(y_n);
