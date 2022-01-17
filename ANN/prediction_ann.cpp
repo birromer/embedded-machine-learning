@@ -142,7 +142,7 @@ std::vector<double> normalize(std::vector<double> input, std::vector<double> mea
   std::vector<double> once_upon_a_time_we_used_haskell(input.size(), 0);
 
   for (std::size_t i=0; i<input.size(); i++) {
-    once_upon_a_time_we_used_haskell[i] = (input[i] - mean[i])/sqrt(stddev[i]);
+    once_upon_a_time_we_used_haskell[i] = (input[i] - mean[i])/stddev[i];
   }
 
   return once_upon_a_time_we_used_haskell;

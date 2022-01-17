@@ -126,8 +126,6 @@ if __name__ == "__main__":
     print("\nConfusion Matrix:")
     print(matrix)
 
-    print("predictions:", predictions[:5].argmax(axis=1))
-    print("Y_test:", Y_test[:5])
     print("Accuracy:", float(np.sum(predictions.argmax(axis=1) == Y_test))/len(Y_test))
 
     print("Generating weights file")
@@ -157,10 +155,6 @@ if __name__ == "__main__":
         mean = mean.reshape((len(mean),1))
         stddev = stddev.reshape((len(stddev),1))
         header = ['AVG{}'.format(i) for i in range(len(mean)+1)] + ['STDDEV{}'.format(i) for i in range(len(stddev)+1)]
-
-        print("mean shape", mean.shape)
-        print("stddev shape", stddev.shape)
-
         np.savetxt(f_stats, np.concatenate((mean,stddev), axis=0).T, header=','.join(header), delimiter=',', comments='')
 
     print("Finished saving model")
