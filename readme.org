@@ -297,17 +297,21 @@ Confusion matrix:
       rock         0         1         1         6         0         2         2         2         1        15
 
 
-ANN accuracy: 0.34
+ANN accuracy: 0.64
 Confusion matrix:
                blues classical   country     disco    hiphop      jazz     metal       pop    reggae      rock
-     blues         6         2        14         4         2         2         0         0         0         0
- classical         0        20         6         0         0         4         0         0         0         0
-   country         0         1        29         0         0         0         0         0         0         0
-     disco         0         2         9        16         3         0         0         0         0         0
-    hiphop         0         1         4         4        20         1         0         0         0         0
-      jazz         1         3        14         1         0        11         0         0         0         0
-     metal         0         0        15         5         8         2         0         0         0         0
-       pop         2         0         5         8        14         1         0         0         0         0
-    reggae         0         0        12         5        12         1         0         0         0         0
-      rock         0         1        22         7         0         0         0         0         0         0
+     blues        20         0         2         1         0         1         0         0         3         3
+ classical         1        26         1         0         0         0         0         0         1         1
+   country         3         0        17         1         0         1         1         1         0         6
+     disco         1         0         1        16         2         2         0         3         2         3
+    hiphop         0         0         0         4        18         0         2         0         6         0
+      jazz         3         2         2         0         0        21         0         0         2         0
+     metal         0         0         0         1         2         1        20         0         0         6
+       pop         0         1         0         2         1         0         0        25         1         0
+    reggae         2         1         2         2         3         1         0         1        17         1
+      rock         3         0         2         7         0         1         2         1         2        12
 #+end_example
+
+We can see here that the CART clearly has the worst results, while SVM and ANN arrive at similar precisions. The ANN can probably be better explored for different architectures, if more time was available, so to achieve better results.
+
+* Raspberry Pi
