@@ -31,6 +31,7 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
 │   ├── prediction_cart.cpp
 │   └── train_cart.py
 ├── DATA
+│   ├── ann_stats.txt
 │   ├── ann_weights.txt
 │   ├── blues
 │   ├── classical
@@ -77,7 +78,7 @@ tree -n -L 2 -I 'build|CMake*|__pycache__'
     ├── prediction_svm.cpp
     └── train_svm.py
 
-18 directories, 37 files
+18 directories, 38 files
 #+end_example
 
 Each of the classifiers has its folder (=ANN/=, =CART/=, =RF/=, =SVM/=) with a training script, usually in Python, for it does not have to be embedded, and a classifier in C++.
