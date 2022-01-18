@@ -315,4 +315,4 @@ Confusion matrix:
 
 We can see here that the CART clearly has the worst results, while SVM and ANN arrive at similar precision. The ANN can probably be better explored with different architectures, if more time was available, so to achieve better results.
 
-The programs have worked in the target machine, as displayed in the video that can be accessed here: [[https://youtu.be/weRj90U_J6U]]
+The programs have worked in the target machine, as displayed in the video that can be accessed here: https://youtu.be/kAHLz-Ts-24
