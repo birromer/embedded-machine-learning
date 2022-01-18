@@ -312,6 +312,6 @@ Confusion matrix:
       rock         3         0         2         7         0         1         2         1         2        12
 #+end_example
 
-We can see here that the CART clearly has the worst results, while SVM and ANN arrive at similar precisions. The ANN can probably be better explored for different architectures, if more time was available, so to achieve better results.
+We can see here that the CART clearly has the worst results, while SVM and ANN arrive at similar precision. The ANN can probably be better explored with different architectures, if more time was available, so to achieve better results.
 
-* Raspberry Pi
+In the end, we could not get the gcc-11 compiler installed on the Raspberry Pi, so it was not possible to test the performance at the target machine.
