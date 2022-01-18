@@ -85,6 +85,9 @@ int main() {
     // remove quotation marks
     music_type.pop_back();
     music_type.erase(0,2);
+
+    if (verbose)
+      cout << "Read file -> " << filename << endl;
     #endif
 
     feature_vector = normalize(feature_vector, ann_stats[0], ann_stats[1]);
@@ -95,7 +98,6 @@ int main() {
     MUSIC_STYLE truth = music_style_from_string(music_type);
 
     #ifdef VERBOSE
-    cout << "Read file -> " << filename << endl;
     cout << "Music type: " << music_type << " | Prediction: " << music_style_to_string(pred);
     cout << " --> " << (pred == truth ? "Correct" : "Wrong") << endl << endl;
     #endif

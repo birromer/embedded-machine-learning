@@ -21,6 +21,14 @@ int main() {
   int count_hits = 0;
   int total_read = 0;
 
+  #ifdef VERBOSE
+  bool verbose = true;
+  #endif
+
+  #ifndef VERBOSE
+  bool verbose = false;
+  #endif
+
   // each line is a known class, each column is the predictions that should have been the same as the line
   vector<vector<int>> confusion_matrix(CLASS_N, vector<int>(CLASS_N, 0));
 
@@ -35,7 +43,7 @@ int main() {
     testing_files.push_back(temp_str);
   }
 
-  auto all_features = compute_set_of_features(testing_files, path_features_testing, false);
+  auto all_features = compute_set_of_features(testing_files, path_features_testing, verbose);
 
   for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
     string music_type = it->first.parent_path().filename();
@@ -70,6 +78,9 @@ int main() {
 
     music_type.pop_back();
     music_type.erase(0,2);
+
+    if (verbose)
+      cout << "Rad file -> " << filename << endl;
   #endif
 
     string prediction = cart_predict(feature_vector);
@@ -78,7 +89,6 @@ int main() {
     MUSIC_STYLE truth = music_style_from_string(music_type);
 
     #ifdef VERBOSE
-    cout << "Rad file -> " << filename << endl;
     cout << "Music type: " << music_type << " | Prediction: " << prediction;
     cout << " --> " << (pred == truth ? "Correct" : "Wrong") << endl << endl;
     #endif

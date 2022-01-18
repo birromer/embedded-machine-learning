@@ -20,6 +20,14 @@ const string path_features_testing = "./DATA/features_testing.csv";
 
 int main() {
 
+  #ifdef VERBOSE
+  bool verbose = true;
+  #endif
+
+  #ifndef VERBOSE
+  bool verbose = false;
+  #endif
+
   // svm model for all 1v1 duels
   vector<vector<double>> svm_model = load_svm_model();
 
@@ -40,7 +48,7 @@ int main() {
     testing_files.push_back(temp_str);
   }
 
-  auto all_features = compute_set_of_features(testing_files, path_features_testing, false);
+  auto all_features = compute_set_of_features(testing_files, path_features_testing, verbose);
 
   for (auto it = all_features.begin(); it != all_features.end(); it+=1) {
     string music_type = it->first.parent_path().filename();
@@ -76,6 +84,9 @@ int main() {
     // remove quotation marks
     music_type.pop_back();
     music_type.erase(0,2);
+
+    if (verbose)
+      cout << "Rad file -> " << filename << endl;
   #endif
 
     int prediction = svm_predict(feature_vector, svm_model);
@@ -84,7 +95,6 @@ int main() {
     MUSIC_STYLE truth = music_style_from_string(music_type);
 
     #ifdef VERBOSE
-    cout << "Rad file -> " << filename << endl;
     cout << "Music type: " << music_type << " | Prediction: " << prediction;
     cout << " --> " << (pred == truth ? "Correct" : "Wrong") << endl << endl;
     #endif
