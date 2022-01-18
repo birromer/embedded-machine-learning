@@ -1,5 +1,14 @@
 # Dataset
-DATA/
+DATA/classical
+DATA/blues
+DATA/country
+DATA/disco
+DATA/hiphop
+DATA/jazz
+DATA/metal
+DATA/pop
+DATA/reggae
+DATA/rock
 
 # Prerequisites
 *.d

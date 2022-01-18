@@ -1,0 +1,7 @@
+#+TITLE: Tests
+
+| Algorithm | Train/Test split | Author | Accuracy |
+| CART      | 67/33            | Prof   |    79.3% |
+| SVM       | 67/33            | Prof   |    61.5% |
+| CART      | 67/33            | Ours   |    51.0% |
+| SVM       | 67/33            | Ours   |    64.7% |
